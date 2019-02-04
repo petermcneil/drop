@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">drop</string>
+    <string name="title_activity_map">Map</string>
+    <string name="filter_title_drop">IntentFilter</string>
+</resources>
