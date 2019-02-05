@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Drop</string>
-    <string name="title_activity_main">Main</string>
+    <string name="title_activity_main">Drop</string>
     <string name="title_activity_map">Map</string>
     <string name="filter_title_drop">IntentFilter</string>
 
     <string name="permission_rationale_location">Permission rationale</string>
-
 
     <string name="dec_drop_logo">Drop Logo</string>
 
