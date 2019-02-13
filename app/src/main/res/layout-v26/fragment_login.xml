@@ -13,10 +13,10 @@
             android:id="@+id/titleText"
             android:layout_width="match_parent"
             android:layout_height="205dp"
-            android:textSize="100sp"
+            android:textSize="50sp"
             android:text="@string/login_main_text"
             android:gravity="center_horizontal"
-            android:drawableTop="@drawable/drop"
+            android:drawableTop="@drawable/ic_drop_logo"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="48dp"
             android:layout_marginTop="40dp"
@@ -142,7 +142,7 @@
             android:id="@+id/closeLogin"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
-            android:contentDescription="Close fragment"/>
+            android:contentDescription="@string/close_login"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

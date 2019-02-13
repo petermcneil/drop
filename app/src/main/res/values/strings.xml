@@ -22,5 +22,8 @@
     <string name="loading">Loading</string>
     <string name="emailpassword_status_fmt">Email: %s : %b</string>
     <string name="login_button">Login</string>
+    <string name="close_login">Close login popup</string>
+    <string name="license_button">Licenses</string>
+    <string name="custom_license_title">Licenses used in Drop</string>
 
 </resources>

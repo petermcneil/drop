@@ -12,4 +12,12 @@
             android:layout_height="wrap_content"
             android:background="@color/primaryDarkColor"
             android:text="@string/login_button"/>
+
+    <Button
+            android:id="@+id/main_license_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryDarkColor"
+            android:text="@string/license_button"/>
+
 </LinearLayout>

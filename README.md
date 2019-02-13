@@ -6,9 +6,7 @@ When someone else with the app goes within 10m from where you dropped your messa
 Drop aims to aid the cause to spend more time outdoors, giving users a reason to head out and 
 explore by providing a platform to share content about highly localised areas.
 Drop achieves this by giving users options to “drop” a message in the world and other users can find these drops
-by exploring outdoors, incen-tivising exploration.
+by exploring outdoors, incentivising exploration.
 
 
 Drop image
-
-<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
