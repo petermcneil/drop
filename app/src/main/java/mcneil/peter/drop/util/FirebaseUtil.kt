@@ -5,11 +5,14 @@ import android.util.Log
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import mcneil.peter.drop.model.Drop
 
-class FirebaseUtil {
+class FirebaseUtil: GeoFire.CompletionListener{
+    override fun onComplete(key: String?, error: DatabaseError?) {}
+
     private val TAG = this.javaClass.simpleName
 
     private val db = FirebaseDatabase.getInstance()
@@ -36,7 +39,7 @@ class FirebaseUtil {
         if (id != null) {
             val geoLocation = GeoLocation(location.latitude, location.longitude)
 
-            geoFire.setLocation(id, geoLocation)
+            geoFire.setLocation(id, geoLocation, this)
         } else {
             Log.e(TAG, "Failed to upload")
         }
@@ -49,6 +52,5 @@ class FirebaseUtil {
 
         query.addGeoQueryEventListener(listener)
     }
-
 
 }
