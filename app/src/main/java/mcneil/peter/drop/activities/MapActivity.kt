@@ -1,28 +1,22 @@
 package mcneil.peter.drop.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.location.Location
 import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-private const val FINE_LOCATION: Int = 1231
-
 class MapActivity : BaseActivity(), OnMapReadyCallback, EasyPermissions.PermissionCallbacks {
-
-    private lateinit var locationManager: LocationManager
+    private val TAG = this.javaClass.simpleName
     private lateinit var map: GoogleMap
 
     private var showPermissionDeniedDialog = false
@@ -30,15 +24,13 @@ class MapActivity : BaseActivity(), OnMapReadyCallback, EasyPermissions.Permissi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
         setContentView(R.layout.activity_map)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
     /**
-     * Google Map function - defines the map and updates the location
+     * Google Map function - defines the map and updates the locationUtil
      */
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -53,29 +45,21 @@ class MapActivity : BaseActivity(), OnMapReadyCallback, EasyPermissions.Permissi
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(FINE_LOCATION)
     private fun updateLocation() {
-        val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-
-        if (EasyPermissions.hasPermissions(this, *permissions)) {
-            map.isMyLocationEnabled = true
-            zoomToLocation()
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), FINE_LOCATION, *permissions)
-        }
+        map.isMyLocationEnabled = true
+        zoomToLocation()
     }
 
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(FINE_LOCATION)
     fun zoomToLocation() {
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if (location != null) {
-            Log.i(TAG, "ZOOMING TO POSITION")
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 13f))
+        val location = locationUtil.currentLocation()
 
-            val cameraPosition = CameraPosition.Builder().target(LatLng(location.latitude, location.longitude))
-                .zoom(17f).bearing(90f).tilt(40f).build()
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 13f))
 
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-        }
+        val cameraPosition = CameraPosition.Builder().target(LatLng(location.latitude, location.longitude)).zoom(17f)
+            .bearing(90f).tilt(40f).build()
+
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
 
@@ -97,8 +81,8 @@ class MapActivity : BaseActivity(), OnMapReadyCallback, EasyPermissions.Permissi
     }
 
     @SuppressLint("MissingPermission")
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        locationUtil.onUpdate(locationListener)
     }
 
 

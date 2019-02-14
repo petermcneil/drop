@@ -32,6 +32,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+
     testImplementation "junit:junit:$junit_version"
 
     androidTestImplementation "androidx.test:runner:$android_test_version"
@@ -40,6 +42,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
+
+
+    implementation 'com.firebase:geofire-android:2.3.1'
 }
 
 //DO NOT MOVE THIS FROM THE BOTTOM OF THE GRADLE FILE

@@ -24,6 +24,17 @@
     <string name="login_button">Login</string>
     <string name="close_login">Close login popup</string>
     <string name="license_button">Licenses</string>
+    <string name="drop_button">Drop</string>
     <string name="custom_license_title">Licenses used in Drop</string>
+
+    <!--Toasts-->
+    <string name="toast_password_wrong">Password is wrong</string>
+    <string name="toast_auth_failed">Authentication failed.</string>
+    <string name="toast_email_fail">Failed to send verification email.</string>
+    <string name="toast_email_sent">Verification email sent to ${user.email}.</string>
+    <string name="create_drop_heading">Create Drop</string>
+    <string name="create_drop_submit">Drop</string>
+    <string name="create_drop_text_label">Message</string>
+    <string name="show_drop_button">Show drop</string>
 
 </resources>

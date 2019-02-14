@@ -292,8 +292,8 @@
   copyrightHolder: #COPYRIGHT_HOLDER#
   license: Android Software Development Kit License
   licenseUrl: https://developer.android.com/studio/terms.html
-- artifact: com.google.android.gms:play-services-location:+
-  name: play-services-location
+- artifact: com.google.android.gms:play-services-locationUtil:+
+  name: play-services-locationUtil
   copyrightHolder: #COPYRIGHT_HOLDER#
   license: Android Software Development Kit License
   licenseUrl: https://developer.android.com/studio/terms.html

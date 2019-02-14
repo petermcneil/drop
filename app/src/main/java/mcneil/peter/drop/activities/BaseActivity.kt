@@ -1,34 +1,39 @@
 package mcneil.peter.drop.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import mcneil.peter.drop.util.HideKeyboard
+import mcneil.peter.drop.R
+import pub.devrel.easypermissions.EasyPermissions
 
+const val FINE_LOCATION: Int = 1231
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+    private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
-    companion object {
-        val TAG: String = "PM6"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
+
+
+        if (!EasyPermissions.hasPermissions(this, *permissions)) {
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), FINE_LOCATION, *permissions)
+        }
     }
 
-    /**
-     *  Hides keyboard when not focused
-     *
-     *  @param id of main layout
-     *  @param activity on which to close the keyboard
-     *  @return closed keyboard
-     */
-    fun hideKeyboard(id: Int) {
-        findViewById<View>(id).setOnTouchListener(HideKeyboard(this))
+    override fun onPermissionsDenied(requestCode: Int, list: List<String>) {
+        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), FINE_LOCATION, *permissions)
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {}
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
 }

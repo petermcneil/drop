@@ -1,16 +1,17 @@
 package mcneil.peter.drop.util
 
 import android.widget.EditText
+import mcneil.peter.drop.model.Either
 
 class Validate {
     companion object {
         private val emailRegex = Regex("(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
         private val passwordRegex = Regex(".{8,}")
 
-        fun email(email: String): Pair<Boolean, String?> {
+        fun email(email: String): Either<String, Boolean> {
             val sanitisedEmail = email.trim()
             var valid = true
-            var message: String? = null
+            var message = ""
 
             if (sanitisedEmail.isEmpty()) {
                 valid = false
@@ -22,19 +23,27 @@ class Validate {
                 message = "Email is not valid."
             }
 
-            return Pair(valid, message)
+            return if (valid) {
+                Either.Right(valid)
+            } else {
+                Either.Left(message)
+            }
         }
 
-        fun password(password: String): Pair<Boolean, String?> {
+        fun password(password: String): Either<String, Boolean> {
             var valid = true
-            var message: String? = null
+            var message = ""
 
             if (!passwordRegex.matches(password)) {
                 valid = false
                 message = "Password must be 8 characters or longer."
             }
 
-            return Pair(valid, message)
+            return if (valid) {
+                Either.Right(valid)
+            } else {
+                Either.Left(message)
+            }
         }
 
         fun emailPasswordForm(fieldEmail: EditText, fieldPassword: EditText): Boolean {
@@ -47,15 +56,15 @@ class Validate {
             val validPassword = Validate.password(password)
 
 
-            if (!validEmail.first) {
-                fieldEmail.error = validEmail.second
+            if (validEmail is Either.Left) {
+                fieldEmail.error = validEmail.value
                 valid = false
             } else {
                 fieldEmail.error = null
             }
 
-            if (!validPassword.first) {
-                fieldPassword.error = validPassword.second
+            if (validPassword is Either.Left) {
+                fieldPassword.error = validPassword.value
                 valid = false
             } else {
                 fieldPassword.error = null

@@ -136,7 +136,7 @@
     <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_close_black_24dp"
+            app:srcCompat="?attr/homeAsUpIndicator"
             android:id="@+id/closeLogin"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"

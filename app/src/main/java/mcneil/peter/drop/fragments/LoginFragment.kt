@@ -13,24 +13,23 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.DialogFragment
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_login.*
+import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
-import mcneil.peter.drop.activities.BaseActivity
 import mcneil.peter.drop.util.HideKeyboard
 import mcneil.peter.drop.util.Validate
 
 class LoginFragment : DialogFragment(), View.OnClickListener {
-    private lateinit var auth: FirebaseAuth
+    private val TAG = this.javaClass.simpleName
+
     private lateinit var loginButtons: Group
     private lateinit var signedInButtons: Group
     private lateinit var userInfo: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_login, container)
-        auth = FirebaseAuth.getInstance()
 
         //Register buttons
         view.findViewById<AppCompatButton>(R.id.emailSignInButton).setOnClickListener(this)
@@ -46,9 +45,12 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         //Hide Keyboard
         view.findViewById<View>(R.id.frag_login_layout).setOnTouchListener(HideKeyboard(activity as Activity))
 
-        Log.d(BaseActivity.TAG, "Completed setting up login page")
-
         return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DropTheme)
     }
 
     override fun onStart() {
@@ -59,56 +61,48 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
 
     override fun onResume() {
         val params = dialog.window!!.attributes
-        // Assign window properties to fill the parent
         params.width = WindowManager.LayoutParams.MATCH_PARENT
         params.height = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window!!.attributes = params as android.view.WindowManager.LayoutParams
         super.onResume()
     }
 
-
     private fun createAccount(email: String, password: String) {
-        Log.d(BaseActivity.TAG, "createAccount:$email")
         if (!Validate.emailPasswordForm(fieldEmail, fieldPassword)) {
             return
         }
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(context as Activity) { task ->
             if (task.isSuccessful) {
-                Log.d(BaseActivity.TAG, "createUserWithEmail:success")
+                Log.d(TAG, "createUserWithEmail:success")
                 val user = auth.currentUser
                 updateUI(user)
             } else {
-                Log.w(BaseActivity.TAG, "createUserWithEmail:failure", task.exception)
-                Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                Toast.makeText(context, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
                 updateUI(null)
             }
         }
     }
 
     private fun signIn(email: String, password: String) {
-        Log.d(BaseActivity.TAG, "signIn:$email")
         if (!Validate.emailPasswordForm(fieldEmail, fieldPassword)) {
             return
         }
 
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(context as Activity) { task ->
             if (task.isSuccessful) {
-                Log.d(BaseActivity.TAG, "signInWithEmail:success")
+                Log.d(TAG, "signInWithEmail:success")
                 val user = auth.currentUser
                 updateUI(user)
             } else {
                 if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                    Toast.makeText(context, "Password is wrong", Toast.LENGTH_SHORT).show()
-                    Log.w(BaseActivity.TAG, "signInWithEmail:failure:passwordWrong")
+                    Toast.makeText(context, getString(R.string.toast_password_wrong), Toast.LENGTH_SHORT).show()
+                    Log.w(TAG, "signInWithEmail:failure:passwordWrong")
                 } else {
-                    Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                    Log.w(BaseActivity.TAG, "signInWithEmail:failure:unknown", task.exception)
+                    Toast.makeText(context, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
+                    Log.w(TAG, "signInWithEmail:failure:unknown", task.exception)
                 }
                 updateUI(null)
-            }
-
-            if (!task.isSuccessful) {
-
             }
         }
     }
@@ -131,8 +125,7 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
 
 
     override fun onClick(v: View) {
-        val i = v.id
-        when (i) {
+        when (v.id) {
             R.id.emailCreateAccountButton -> createAccount(fieldEmail.text.toString(), fieldPassword.text.toString())
             R.id.emailSignInButton -> signIn(fieldEmail.text.toString(), fieldPassword.text.toString())
             R.id.signOutButton -> signOut()
@@ -155,15 +148,12 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
             verifyEmailButton.isEnabled = true
 
             if (task.isSuccessful) {
-                Toast.makeText(context, "Verification email sent to ${user.email} ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.toast_email_sent), Toast.LENGTH_SHORT).show()
             } else {
-                Log.e(BaseActivity.TAG, "sendEmailVerification", task.exception)
-                Toast.makeText(context, "Failed to send verification email.", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "sendEmailVerification", task.exception)
+                Toast.makeText(context, getString(R.string.toast_email_fail), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
 }

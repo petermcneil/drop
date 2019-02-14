@@ -5,7 +5,6 @@
               android:layout_height="match_parent"
               android:background="@color/primaryLightColor">
 
-
     <Button
             android:id="@+id/main_login_button"
             android:layout_width="match_parent"
@@ -19,5 +18,26 @@
             android:layout_height="wrap_content"
             android:background="@color/primaryDarkColor"
             android:text="@string/license_button"/>
+
+    <Button
+            android:id="@+id/main_drop_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryDarkColor"
+            android:text="@string/drop_button"/>
+
+    <Button
+            android:id="@+id/main_show_drop_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryDarkColor"
+            android:text="@string/show_drop_button"/>
+
+    <TextView
+            android:id="@+id/main_drop_text"
+            android:layout_width="match_parent"
+            android:layout_height="147dp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/white"/>
 
 </LinearLayout>
