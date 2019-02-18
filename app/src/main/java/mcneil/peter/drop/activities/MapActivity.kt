@@ -4,19 +4,16 @@ import android.annotation.SuppressLint
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
 class MapActivity : BaseActivity(), OnMapReadyCallback, EasyPermissions.PermissionCallbacks {
-    private val TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.canonicalName
     private lateinit var map: GoogleMap
 
     private var showPermissionDeniedDialog = false
@@ -52,14 +49,14 @@ class MapActivity : BaseActivity(), OnMapReadyCallback, EasyPermissions.Permissi
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(FINE_LOCATION)
     fun zoomToLocation() {
-        val location = locationUtil.currentLocation()
-
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 13f))
-
-        val cameraPosition = CameraPosition.Builder().target(LatLng(location.latitude, location.longitude)).zoom(17f)
-            .bearing(90f).tilt(40f).build()
-
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+//        val location = null
+//
+//        map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 13f))
+//
+//        val cameraPosition = CameraPosition.Builder().target(LatLng(location.latitude, location.longitude)).zoom(17f)
+//            .bearing(90f).tilt(40f).build()
+//
+//        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
 

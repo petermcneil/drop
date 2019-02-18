@@ -14,7 +14,6 @@ const val FINE_LOCATION: Int = 1231
 open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
-
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
 

@@ -10,10 +10,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import mcneil.peter.drop.model.Drop
 
-class FirebaseUtil: GeoFire.CompletionListener{
-    override fun onComplete(key: String?, error: DatabaseError?) {}
-
-    private val TAG = this.javaClass.simpleName
+class FirebaseUtil : GeoFire.CompletionListener {
+    private val TAG = this.javaClass.canonicalName
 
     private val db = FirebaseDatabase.getInstance()
     private val dropDb = db.getReference("drops/")
@@ -45,7 +43,7 @@ class FirebaseUtil: GeoFire.CompletionListener{
         }
     }
 
-    fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius : Double = 0.01) {
+    fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01) {
         val geoLocation = GeoLocation(location.latitude, location.longitude)
 
         val query = geoFire.queryAtLocation(geoLocation, radius)
@@ -53,4 +51,6 @@ class FirebaseUtil: GeoFire.CompletionListener{
         query.addGeoQueryEventListener(listener)
     }
 
+
+    override fun onComplete(key: String?, error: DatabaseError?) {}
 }

@@ -19,7 +19,7 @@ import mcneil.peter.drop.model.DropLocation
 import mcneil.peter.drop.util.HideKeyboard
 
 class CreateDropFragment : DialogFragment(), View.OnClickListener {
-    private val TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.canonicalName
 
     private lateinit var messageBox: EditText
 
@@ -55,7 +55,7 @@ class CreateDropFragment : DialogFragment(), View.OnClickListener {
 
     private fun dropMessage() {
         val dropMessage = messageBox.text.toString()
-        val location = locationUtil.currentLocation()
+        val location = locationUtil.lastKnownLocation()
         val dropLocation = DropLocation(location.latitude, location.longitude)
         val drop = Drop(dropMessage, dropLocation, auth.currentUser!!.uid)
 

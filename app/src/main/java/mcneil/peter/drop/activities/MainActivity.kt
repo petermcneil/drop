@@ -1,5 +1,6 @@
 package mcneil.peter.drop.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,15 +14,19 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
-import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
+import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
+import mcneil.peter.drop.callback.SingleLocationCallback
 import mcneil.peter.drop.fragments.CreateDropFragment
 import mcneil.peter.drop.fragments.LoginFragment
 import mcneil.peter.drop.model.Drop
+import pub.devrel.easypermissions.AfterPermissionGranted
 
 class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener, ValueEventListener {
-    private val TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.canonicalName
+
+    private val locationCallback = SingleLocationCallback(this)
 
     private lateinit var fm: FragmentManager
     private lateinit var text: TextView
@@ -61,15 +66,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener
         OssLicensesMenuActivity.setActivityTitle(getString(R.string.custom_license_title))
     }
 
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(FINE_LOCATION)
     private fun displayDrops() {
         text.text = ""
-        firebaseUtil.dropsForLocation(DropApp.locationUtil.currentLocation(), this)
+        locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationCallback, null)
     }
 
     //Runs on start up
     override fun onKeyEntered(key: String?, location: GeoLocation?) {
-        if (key != null)
-            firebaseUtil.readDrop(key, this)
+        if (key != null) firebaseUtil.readDrop(key, this)
     }
 
     override fun onDataChange(ds: DataSnapshot) {

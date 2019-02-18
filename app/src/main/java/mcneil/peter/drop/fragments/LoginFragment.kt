@@ -22,7 +22,7 @@ import mcneil.peter.drop.util.HideKeyboard
 import mcneil.peter.drop.util.Validate
 
 class LoginFragment : DialogFragment(), View.OnClickListener {
-    private val TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.canonicalName
 
     private lateinit var loginButtons: Group
     private lateinit var signedInButtons: Group
