@@ -8,6 +8,7 @@ import com.firebase.geofire.GeoQueryEventListener
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.model.Drop
 
 class FirebaseUtil : GeoFire.CompletionListener {
@@ -17,6 +18,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
     private val dropDb = db.getReference("drops/")
     private val geoDb = db.getReference("geofire/")
     private val geoFire = GeoFire(geoDb)
+    private lateinit var lastKnownLocation: Location
 
     fun writeDrop(dropApp: Drop): String? {
         val nextRef = dropDb.push()
@@ -36,21 +38,22 @@ class FirebaseUtil : GeoFire.CompletionListener {
     fun linkDropToLocation(id: String?, location: Location) {
         if (id != null) {
             val geoLocation = GeoLocation(location.latitude, location.longitude)
-
             geoFire.setLocation(id, geoLocation, this)
         } else {
             Log.e(TAG, "Failed to upload")
         }
     }
 
-    fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01) {
-        val geoLocation = GeoLocation(location.latitude, location.longitude)
+    fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01, empty: Boolean = false) {
+        if (!::lastKnownLocation.isInitialized) lastKnownLocation = location
+        if (locationUtil.fuzzyCheckLocation(location, lastKnownLocation) || empty) {
+            val geoLocation = GeoLocation(location.latitude, location.longitude)
 
-        val query = geoFire.queryAtLocation(geoLocation, radius)
+            val query = geoFire.queryAtLocation(geoLocation, radius)
 
-        query.addGeoQueryEventListener(listener)
+            query.addGeoQueryEventListener(listener)
+        }
     }
-
 
     override fun onComplete(key: String?, error: DatabaseError?) {}
 }

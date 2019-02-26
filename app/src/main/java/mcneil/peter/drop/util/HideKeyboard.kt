@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
-
 class HideKeyboard constructor(act: Activity) : View.OnTouchListener {
     private val activity = act
 

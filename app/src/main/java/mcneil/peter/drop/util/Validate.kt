@@ -55,7 +55,6 @@ class Validate {
             val password = fieldPassword.text.toString()
             val validPassword = Validate.password(password)
 
-
             if (validEmail is Either.Left) {
                 fieldEmail.error = validEmail.value
                 valid = false

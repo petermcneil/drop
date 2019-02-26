@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_login.*
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
@@ -31,7 +30,6 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_login, container)
 
-        //Register buttons
         view.findViewById<AppCompatButton>(R.id.emailSignInButton).setOnClickListener(this)
         view.findViewById<AppCompatButton>(R.id.emailCreateAccountButton).setOnClickListener(this)
         view.findViewById<AppCompatButton>(R.id.signOutButton).setOnClickListener(this)
@@ -42,7 +40,6 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         signedInButtons = view.findViewById(R.id.signedInButtons)
         userInfo = view.findViewById(R.id.userInformation)
 
-        //Hide Keyboard
         view.findViewById<View>(R.id.frag_login_layout).setOnTouchListener(HideKeyboard(activity as Activity))
 
         return view
@@ -55,8 +52,7 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
+        updateUI()
     }
 
     override fun onResume() {
@@ -67,6 +63,16 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         super.onResume()
     }
 
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.emailCreateAccountButton -> createAccount(fieldEmail.text.toString(), fieldPassword.text.toString())
+            R.id.emailSignInButton -> signIn(fieldEmail.text.toString(), fieldPassword.text.toString())
+            R.id.signOutButton -> signOut()
+            R.id.verifyEmailButton -> sendEmailVerification()
+            R.id.closeLogin -> dismiss()
+        }
+    }
+
     private fun createAccount(email: String, password: String) {
         if (!Validate.emailPasswordForm(fieldEmail, fieldPassword)) {
             return
@@ -74,12 +80,11 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(context as Activity) { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "createUserWithEmail:success")
-                val user = auth.currentUser
-                updateUI(user)
+                updateUI()
             } else {
                 Log.w(TAG, "createUserWithEmail:failure", task.exception)
                 Toast.makeText(context, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
-                updateUI(null)
+                updateUI()
             }
         }
     }
@@ -92,8 +97,7 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(context as Activity) { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "signInWithEmail:success")
-                val user = auth.currentUser
-                updateUI(user)
+                updateUI()
             } else {
                 if (task.exception is FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(context, getString(R.string.toast_password_wrong), Toast.LENGTH_SHORT).show()
@@ -102,19 +106,16 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
                     Toast.makeText(context, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
                     Log.w(TAG, "signInWithEmail:failure:unknown", task.exception)
                 }
-                updateUI(null)
+                updateUI()
             }
         }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
+    private fun updateUI() {
+        val user = auth.currentUser
         if (user != null) {
-            userInfo.text = getString(R.string.emailpassword_status_fmt, user.email, user.isEmailVerified)
-
-            loginButtons.visibility = View.GONE
-            signedInButtons.visibility = View.VISIBLE
-
-            verifyEmailButton.isEnabled = !user.isEmailVerified
+            Toast.makeText(context, getString(R.string.toast_auth_success), Toast.LENGTH_SHORT).show()
+            dismiss()
         } else {
             userInfo.text = null
 
@@ -123,20 +124,9 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         }
     }
 
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.emailCreateAccountButton -> createAccount(fieldEmail.text.toString(), fieldPassword.text.toString())
-            R.id.emailSignInButton -> signIn(fieldEmail.text.toString(), fieldPassword.text.toString())
-            R.id.signOutButton -> signOut()
-            R.id.verifyEmailButton -> sendEmailVerification()
-            R.id.closeLogin -> dismiss()
-        }
-    }
-
     private fun signOut() {
         auth.signOut()
-        updateUI(null)
+        updateUI()
     }
 
     private fun sendEmailVerification() {
@@ -144,9 +134,7 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
 
         val user = auth.currentUser
         user?.sendEmailVerification()?.addOnCompleteListener(context as Activity) { task ->
-
             verifyEmailButton.isEnabled = true
-
             if (task.isSuccessful) {
                 Toast.makeText(context, getString(R.string.toast_email_sent), Toast.LENGTH_SHORT).show()
             } else {

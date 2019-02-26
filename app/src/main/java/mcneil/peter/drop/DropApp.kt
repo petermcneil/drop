@@ -18,7 +18,6 @@ class DropApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         auth = FirebaseAuth.getInstance()
         locationUtil = LocationUtil(this.getSystemService(Context.LOCATION_SERVICE) as LocationManager, FusedLocationProviderClient(this))
         firebaseUtil = FirebaseUtil()

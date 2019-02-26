@@ -26,13 +26,6 @@
             android:background="@color/primaryDarkColor"
             android:text="@string/drop_button"/>
 
-    <Button
-            android:id="@+id/main_show_drop_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primaryDarkColor"
-            android:text="@string/show_drop_button"/>
-
     <TextView
             android:id="@+id/main_drop_text"
             android:layout_width="match_parent"

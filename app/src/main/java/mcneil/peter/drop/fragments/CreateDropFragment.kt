@@ -55,15 +55,14 @@ class CreateDropFragment : DialogFragment(), View.OnClickListener {
 
     private fun dropMessage() {
         val dropMessage = messageBox.text.toString()
-        val location = locationUtil.lastKnownLocation()
-        val dropLocation = DropLocation(location.latitude, location.longitude)
+        val dropLocation = DropLocation(locationUtil.lastKnownLocation.latitude, locationUtil.lastKnownLocation.longitude)
         val drop = Drop(dropMessage, dropLocation, auth.currentUser!!.uid)
 
         val id = firebaseUtil.writeDrop(drop)
 
-        firebaseUtil.linkDropToLocation(id, location)
+        firebaseUtil.linkDropToLocation(id, locationUtil.lastKnownLocation)
 
-        Log.i(TAG, "Message: $dropMessage\n Location: $location")
+        Log.d(TAG, "Message: $dropMessage\n Location: ${locationUtil.lastKnownLocation}")
         dismiss()
     }
 }

@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
+import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
+import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
 const val FINE_LOCATION: Int = 1231
@@ -14,13 +16,16 @@ const val FINE_LOCATION: Int = 1231
 open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(FINE_LOCATION)
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-
 
         if (!EasyPermissions.hasPermissions(this, *permissions)) {
             EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), FINE_LOCATION, *permissions)
         }
+
+        locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
     }
 
     override fun onPermissionsDenied(requestCode: Int, list: List<String>) {
@@ -28,7 +33,8 @@ open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
     @SuppressLint("MissingPermission")
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {}
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+    }
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
