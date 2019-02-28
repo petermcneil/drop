@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -21,14 +20,12 @@ import mcneil.peter.drop.util.HideKeyboard
 import mcneil.peter.drop.util.Validate
 
 class LoginFragment : DialogFragment(), View.OnClickListener {
-    private val TAG = this.javaClass.canonicalName
-
     private lateinit var loginButtons: Group
     private lateinit var signedInButtons: Group
     private lateinit var userInfo: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_login, container)
+        val view = inflater.inflate(R.layout.fragment_login, container, false)
 
         view.findViewById<AppCompatButton>(R.id.emailSignInButton).setOnClickListener(this)
         view.findViewById<AppCompatButton>(R.id.emailCreateAccountButton).setOnClickListener(this)
@@ -55,14 +52,6 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         updateUI()
     }
 
-    override fun onResume() {
-        val params = dialog.window!!.attributes
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.MATCH_PARENT
-        dialog.window!!.attributes = params as android.view.WindowManager.LayoutParams
-        super.onResume()
-    }
-
     override fun onClick(v: View) {
         when (v.id) {
             R.id.emailCreateAccountButton -> createAccount(fieldEmail.text.toString(), fieldPassword.text.toString())
@@ -79,10 +68,10 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
         }
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(context as Activity) { task ->
             if (task.isSuccessful) {
-                Log.d(TAG, "createUserWithEmail:success")
+                Log.d(tag, "createUserWithEmail:success")
                 updateUI()
             } else {
-                Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                Log.w(tag, "createUserWithEmail:failure", task.exception)
                 Toast.makeText(context, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
                 updateUI()
             }
@@ -96,15 +85,15 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
 
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(context as Activity) { task ->
             if (task.isSuccessful) {
-                Log.d(TAG, "signInWithEmail:success")
+                Log.d(tag, "signInWithEmail:success")
                 updateUI()
             } else {
                 if (task.exception is FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(context, getString(R.string.toast_password_wrong), Toast.LENGTH_SHORT).show()
-                    Log.w(TAG, "signInWithEmail:failure:passwordWrong")
+                    Log.w(tag, "signInWithEmail:failure:passwordWrong")
                 } else {
                     Toast.makeText(context, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
-                    Log.w(TAG, "signInWithEmail:failure:unknown", task.exception)
+                    Log.w(tag, "signInWithEmail:failure:unknown", task.exception)
                 }
                 updateUI()
             }
@@ -114,8 +103,12 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
     private fun updateUI() {
         val user = auth.currentUser
         if (user != null) {
-            Toast.makeText(context, getString(R.string.toast_auth_success), Toast.LENGTH_SHORT).show()
-            dismiss()
+            userInfo.text = getString(R.string.emailpassword_status_fmt, user.email, user.isEmailVerified)
+
+            loginButtons.visibility = View.GONE
+            signedInButtons.visibility = View.VISIBLE
+
+            verifyEmailButton.isEnabled = !user.isEmailVerified
         } else {
             userInfo.text = null
 
@@ -138,7 +131,7 @@ class LoginFragment : DialogFragment(), View.OnClickListener {
             if (task.isSuccessful) {
                 Toast.makeText(context, getString(R.string.toast_email_sent), Toast.LENGTH_SHORT).show()
             } else {
-                Log.e(TAG, "sendEmailVerification", task.exception)
+                Log.e(tag, "sendEmailVerification", task.exception)
                 Toast.makeText(context, getString(R.string.toast_email_fail), Toast.LENGTH_SHORT).show()
             }
         }

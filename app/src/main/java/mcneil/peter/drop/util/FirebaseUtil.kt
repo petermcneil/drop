@@ -55,5 +55,6 @@ class FirebaseUtil : GeoFire.CompletionListener {
         }
     }
 
+
     override fun onComplete(key: String?, error: DatabaseError?) {}
 }

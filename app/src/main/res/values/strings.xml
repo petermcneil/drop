@@ -37,5 +37,8 @@
     <string name="create_drop_submit">Drop</string>
     <string name="create_drop_text_label">Message</string>
     <string name="show_drop_button">Show drop</string>
+    <string name="menu_account">Account</string>
+    <string name="menu_drops">Drops</string>
+    <string name="menu_main">Main</string>
 
 </resources>

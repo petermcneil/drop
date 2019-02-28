@@ -1,36 +1,35 @@
 package mcneil.peter.drop.activities
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.TextView
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
-import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
-import mcneil.peter.drop.fragments.CreateDropFragment
-import mcneil.peter.drop.fragments.LoginFragment
+import mcneil.peter.drop.fragments.AccountFragment
+import mcneil.peter.drop.fragments.DropsFragment
+import mcneil.peter.drop.fragments.MainFragment
 import mcneil.peter.drop.model.Drop
 import pub.devrel.easypermissions.AfterPermissionGranted
 
-class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener, ValueEventListener {
-    private val TAG = this.javaClass.canonicalName
-
+class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
+    private val TAG = this.javaClass.simpleName
     private lateinit var locationCallback: LocationCallback
-    private lateinit var fm: FragmentManager
-    private lateinit var dropTextView: TextView
+    private val fm = supportFragmentManager
+
+    private val dropsFragment = DropsFragment()
+    private val mainFragment = MainFragment()
+    private val accountFragment = AccountFragment()
+    private var active: Fragment = mainFragment
 
     ///////////////////////// Activity overrides /////////////////////////
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,12 +43,33 @@ class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener
             }
         }
 
-        fm = supportFragmentManager
-        main_login_button.setOnClickListener(this)
-        main_license_button.setOnClickListener(this)
-        main_drop_button.setOnClickListener(this)
+        bottom_navigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menu_account -> {
+                    fm.beginTransaction().hide(active).show(accountFragment).commit()
+                    active = accountFragment
+                }
+                R.id.menu_main -> {
+                    fm.beginTransaction().hide(active).show(mainFragment).commit()
+                    active = mainFragment
+                }
+                R.id.menu_drops -> {
+                    fm.beginTransaction().hide(active).show(dropsFragment).commit()
+                    active = dropsFragment
+                }
+                else -> {
+                    fm.beginTransaction().hide(active).show(accountFragment).commit()
+                    active = accountFragment
+                }
 
-        dropTextView = findViewById(R.id.main_drop_text)
+            }
+            return@setOnNavigationItemSelectedListener true
+        }
+
+        fm.beginTransaction().add(R.id.main_container, accountFragment, "3").hide(accountFragment).commit()
+        fm.beginTransaction().add(R.id.main_container, dropsFragment, "2").hide(dropsFragment).commit()
+        fm.beginTransaction().add(R.id.main_container, mainFragment, "1").commit()
+
         startLocationUpdates()
     }
 
@@ -61,15 +81,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener
     override fun onPause() {
         super.onPause()
         stopLocationUpdates()
-    }
-
-    ///////////////////////// View.OnClickListener overrides /////////////////////////
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.main_login_button -> if(auth.currentUser == null) LoginFragment().show(fm, "fragment_login")
-            R.id.main_license_button -> openLicense()
-            R.id.main_drop_button -> CreateDropFragment().show(fm, "fragment_create_drop")
-        }
     }
 
     ///////////////////////// GeoQueryEventListener overrides /////////////////////////
@@ -86,17 +97,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener
 
         if (temp != null) {
             Log.d(TAG, "Adding drop to currentDrops: $temp")
-            val ne = dropTextView.text.toString() + temp.toString()
-            dropTextView.text = ne
         }
     }
+
     ///////////////////////// Location functions /////////////////////////
     private fun updateDrops(locationResult: LocationResult) {
-        if (dropTextView.text == "") {
-            firebaseUtil.dropsForLocation(locationResult.locations.first(), this, empty = true)
-        } else {
-            firebaseUtil.dropsForLocation(locationResult.locations.first(), this)
-        }
+        firebaseUtil.dropsForLocation(locationResult.locations.first(), this)
     }
 
     @SuppressLint("MissingPermission")
@@ -107,12 +113,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, GeoQueryEventListener
 
     private fun stopLocationUpdates() {
         locationUtil.locationClient.removeLocationUpdates(locationCallback)
-    }
-
-    ///////////////////////// Misc. functions /////////////////////////
-    private fun openLicense() {
-        startActivity(Intent(this, OssLicensesMenuActivity::class.java))
-        OssLicensesMenuActivity.setActivityTitle(getString(R.string.custom_license_title))
     }
 
     ///////////////////////// Unused overrides /////////////////////////

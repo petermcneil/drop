@@ -8,7 +8,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.activities.FINE_LOCATION
 import pub.devrel.easypermissions.AfterPermissionGranted
 import kotlin.math.abs
@@ -24,6 +23,12 @@ class LocationUtil(private val locationManager: LocationManager, val locationCli
 
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(FINE_LOCATION)
+    fun updateLastKnownLocation() {
+        locationClient.requestLocationUpdates(locationRequest, this, null)
+    }
+
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(FINE_LOCATION)
     fun onUpdate(locationListener: LocationListener) {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
     }
@@ -31,10 +36,9 @@ class LocationUtil(private val locationManager: LocationManager, val locationCli
     override fun onLocationResult(locationResult: LocationResult?) {
         locationResult ?: return
         lastKnownLocation = locationResult.locations.first()
-        DropApp.locationUtil.locationClient.removeLocationUpdates(this)
     }
 
-    fun fuzzyCheckLocation(location1: Location, location2: Location) : Boolean {
+    fun fuzzyCheckLocation(location1: Location, location2: Location): Boolean {
         val longDif = abs(location2.longitude - location1.longitude)
         val latDif = abs(location2.latitude - location1.latitude)
 
