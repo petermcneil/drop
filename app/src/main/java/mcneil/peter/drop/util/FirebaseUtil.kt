@@ -35,6 +35,10 @@ class FirebaseUtil : GeoFire.CompletionListener {
         }
     }
 
+    fun readDrops(listener: ValueEventListener) {
+        dropDb.addListenerForSingleValueEvent(listener)
+    }
+
     fun linkDropToLocation(id: String?, location: Location) {
         if (id != null) {
             val geoLocation = GeoLocation(location.latitude, location.longitude)

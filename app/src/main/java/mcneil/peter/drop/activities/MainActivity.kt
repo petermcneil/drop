@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
-import mcneil.peter.drop.fragments.AccountFragment
-import mcneil.peter.drop.fragments.DropsFragment
+import mcneil.peter.drop.fragments.CreateDropFragment
+import mcneil.peter.drop.fragments.FindDropFragment
 import mcneil.peter.drop.fragments.MainFragment
 import mcneil.peter.drop.model.Drop
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -26,9 +26,9 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
     private lateinit var locationCallback: LocationCallback
     private val fm = supportFragmentManager
 
-    private val dropsFragment = DropsFragment()
+    private val createDrop = CreateDropFragment()
     private val mainFragment = MainFragment()
-    private val accountFragment = AccountFragment()
+    private val findDrop = FindDropFragment()
     private var active: Fragment = mainFragment
 
     ///////////////////////// Activity overrides /////////////////////////
@@ -45,30 +45,30 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.menu_account -> {
-                    fm.beginTransaction().hide(active).show(accountFragment).commit()
-                    active = accountFragment
+                R.id.menu_create -> {
+                    fm.beginTransaction().hide(active).show(createDrop).commit()
+                    active = createDrop
                 }
                 R.id.menu_main -> {
                     fm.beginTransaction().hide(active).show(mainFragment).commit()
                     active = mainFragment
                 }
-                R.id.menu_drops -> {
-                    fm.beginTransaction().hide(active).show(dropsFragment).commit()
-                    active = dropsFragment
+                R.id.menu_find -> {
+                    fm.beginTransaction().hide(active).show(findDrop).commit()
+                    active = findDrop
                 }
                 else -> {
-                    fm.beginTransaction().hide(active).show(accountFragment).commit()
-                    active = accountFragment
+                    fm.beginTransaction().hide(active).show(createDrop).commit()
+                    active = createDrop
                 }
 
             }
             return@setOnNavigationItemSelectedListener true
         }
 
-        fm.beginTransaction().add(R.id.main_container, accountFragment, "3").hide(accountFragment).commit()
-        fm.beginTransaction().add(R.id.main_container, dropsFragment, "2").hide(dropsFragment).commit()
-        fm.beginTransaction().add(R.id.main_container, mainFragment, "1").commit()
+        fm.beginTransaction().add(R.id.main_frag_container, findDrop, "3").hide(findDrop).commit()
+        fm.beginTransaction().add(R.id.main_frag_container, createDrop, "2").hide(createDrop).commit()
+        fm.beginTransaction().add(R.id.main_frag_container, mainFragment, "1").commit()
 
         startLocationUpdates()
     }

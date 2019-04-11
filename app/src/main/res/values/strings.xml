@@ -37,8 +37,20 @@
     <string name="create_drop_submit">Drop</string>
     <string name="create_drop_text_label">Message</string>
     <string name="show_drop_button">Show drop</string>
-    <string name="menu_account">Account</string>
-    <string name="menu_drops">Drops</string>
-    <string name="menu_main">Main</string>
+    <string name="menu_create">Create</string>
+    <string name="menu_find">Find</string>
+    <string name="menu_main">Feed</string>
+    <string name="main_btn_find">Find a drop</string>
+    <string name="main_btn_create">Create a drop</string>
+    <string name="item_title">Title</string>
+    <string name="btn_more_txt">More</string>
+    <string name="item_summary">Summary lorem
+
+    ipsum</string>
+    <string name="item_created">Created on: $date</string>
+    <string name="item_location">50.83509 | -0.12786</string>
+    <string name="create_drop_title">Title</string>
+    <string name="main_btn_login">Login</string>
+    <string name="create_drop_title_label">Title</string>
 
 </resources>

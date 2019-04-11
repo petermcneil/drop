@@ -1,18 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:id="@+id/frag_main_layout">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="675dp"
+              android:id="@+id/frag_main_layout"
+              tools:context="mcneil.peter.drop.activities.MainActivity">
 
 
-    <Button
-            android:id="@+id/main_drop_button"
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primaryDarkColor"
-            android:text="@string/drop_button"
-            android:layout_marginTop="252dp"
-    />
+            android:layout_height="250dp"
+            android:id="@+id/constraintLayout">
 
-</FrameLayout>
+        <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="141dp"
+                tools:srcCompat="@drawable/ic_drop_logo"
+                android:contentDescription="Logo or face"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp"
+            tools:listitem="@layout/row_item"/>
+</LinearLayout>

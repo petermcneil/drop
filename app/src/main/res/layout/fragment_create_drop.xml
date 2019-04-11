@@ -70,6 +70,32 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/create_drop_text"/>
 
+        <EditText
+                android:layout_width="377dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@android:color/background_light"
+                android:id="@+id/create_drop_title"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+                android:layout_marginTop="49dp" app:layout_constraintTop_toBottomOf="@+id/create_drop_heading"/>
+
+        <TextView
+                android:layout_width="29dp"
+                android:layout_height="16dp"
+                android:text="@string/create_drop_title_label"
+                android:ems="10"
+                android:id="@+id/create_drop_title_label"
+                android:inputType="none"
+                android:textAlignment="textStart"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:labelFor="@+id/create_drop_title"
+                android:layout_marginBottom="1dp"
+                app:layout_constraintBottom_toTopOf="@+id/create_drop_title"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

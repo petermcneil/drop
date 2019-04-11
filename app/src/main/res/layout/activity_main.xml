@@ -6,9 +6,11 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    android:orientation="vertical"
-                                                   style="@style/DropTheme.NoTitleActivity">
+                                                   style="@style/DropTheme.NoTitleActivity"
+                                                   tools:context=".activities.MainActivity">
 
     <include
+            android:id="@+id/main_frag_container"
             layout="@layout/content_main"
             android:layout_width="0dp"
             android:layout_height="0dp"

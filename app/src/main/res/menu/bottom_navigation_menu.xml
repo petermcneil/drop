@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_drops"
-          android:title="@string/menu_drops"
+    <item android:id="@+id/menu_find"
+          android:title="@string/menu_find"
           android:icon="@drawable/ic_drop_logo"
           app:showAsAction="ifRoom|withText"/>
 
@@ -12,8 +12,8 @@
           android:icon="@drawable/ic_drop_logo"
           app:showAsAction="ifRoom|withText"/>
 
-    <item android:id="@+id/menu_account"
-          android:title="@string/menu_account"
+    <item android:id="@+id/menu_create"
+          android:title="@string/menu_create"
           android:icon="@drawable/ic_drop_logo"
           app:showAsAction="ifRoom|withText"/>
 

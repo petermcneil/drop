@@ -11,12 +11,14 @@ import android.widget.EditText
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_create_drop.*
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.model.DropLocation
+import mcneil.peter.drop.model.getCurrentDateTime
 import mcneil.peter.drop.util.HideKeyboard
 
 class CreateDropFragment : DialogFragment(), View.OnClickListener {
@@ -47,12 +49,13 @@ class CreateDropFragment : DialogFragment(), View.OnClickListener {
     private fun dropMessage() {
         if (auth.currentUser != null) {
             val dropMessage = messageBox.text.toString()
-            if (dropMessage.isBlank()) {
+            val title = create_drop_title.text.toString()
+            if (dropMessage.isBlank() || title.isBlank()) {
                 Snackbar.make(activity!!.findViewById(R.id.fragment_create_drop), "Text must not be blank", Snackbar.LENGTH_LONG).show()
                 messageBox.setBackgroundColor(Color.RED)
             } else {
                 val dropLocation = DropLocation(locationUtil.lastKnownLocation.latitude, locationUtil.lastKnownLocation.longitude)
-                val drop = Drop(dropMessage, dropLocation, auth.currentUser!!.uid)
+                val drop = Drop(title=title, message = dropMessage, location = dropLocation, ownerId = auth.currentUser!!.uid, createdOn = getCurrentDateTime())
 
                 val id = firebaseUtil.writeDrop(drop)
 
