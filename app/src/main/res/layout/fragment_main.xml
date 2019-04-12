@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="675dp"
+              android:layout_height="@dimen/fragment_container"
               android:id="@+id/frag_main_layout"
               tools:context="mcneil.peter.drop.activities.MainActivity">
 
@@ -30,7 +30,7 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="148dp"
-                    tools:srcCompat="@drawable/ic_drop_logo"
+                    tools:srcCompat="@drawable/default_user_white"
                     android:contentDescription="@string/f_m_face"/>
 
             <androidx.appcompat.widget.AppCompatImageView

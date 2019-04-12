@@ -1,45 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/fragment_create_drop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primaryLightColor"
-        android:orientation="vertical"
-        style="@style/DropTheme.NoTitleActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/fragment_container">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-        <EditText
-                android:layout_width="377dp"
-                android:layout_height="178dp"
+        <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="380dp"
                 android:ems="10"
                 android:id="@+id/create_drop_text"
                 android:textColor="@color/colorPrimaryDark"
                 android:background="@android:color/background_light"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="124dp"
-                app:layout_constraintTop_toBottomOf="@+id/create_drop_heading"
-                android:inputType="textCapSentences|textMultiLine"/>
+                android:inputType="textCapSentences|textMultiLine"
+                android:layout_height="wrap_content" android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/create_drop_title"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
                 android:text="@string/create_drop_submit"
                 android:layout_width="299dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/create_drop_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="70dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="56dp"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="56dp"
+                android:layout_marginTop="26dp" app:layout_constraintTop_toBottomOf="@+id/mapView"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="174dp"
                 android:layout_height="wrap_content"
                 android:text="@string/create_drop_heading"
@@ -55,7 +48,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:textStyle="bold"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="53dp"
                 android:layout_height="16dp"
                 android:text="@string/create_drop_text_label"
@@ -70,8 +63,8 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/create_drop_text"/>
 
-        <EditText
-                android:layout_width="377dp"
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="380dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
@@ -81,7 +74,7 @@
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
                 android:layout_marginTop="49dp" app:layout_constraintTop_toBottomOf="@+id/create_drop_heading"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="29dp"
                 android:layout_height="16dp"
                 android:text="@string/create_drop_title_label"
@@ -96,6 +89,12 @@
                 app:layout_constraintBottom_toTopOf="@+id/create_drop_title"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.gms.maps.MapView
+                android:layout_width="380dp"
+                android:layout_height="238dp"
+                android:id="@+id/mapView" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp" android:layout_marginTop="13dp"
+                app:layout_constraintTop_toBottomOf="@+id/create_drop_text"/>
 
-</FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

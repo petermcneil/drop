@@ -52,7 +52,7 @@
     <string name="create_drop_title">Title</string>
     <string name="main_btn_login">Login</string>
     <string name="create_drop_title_label">Title</string>
-    <string name="f_m_face">Logo or face</string>
+    <string name="f_m_face">Face of logged in user</string>
     <string name="f_m_welcome">Welcome%1$s</string>
 
 </resources>
