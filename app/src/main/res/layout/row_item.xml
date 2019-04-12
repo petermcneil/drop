@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-             android:layout_height="@dimen/list_item_height"
-             android:gravity="center_vertical">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                   android:layout_height="@dimen/list_item_height"
+                                   android:gravity="center_vertical"
+                                   android:layout_margin="8dp"
+                                   app:cardCornerRadius="6dp"
+                                   app:cardElevation="6dp"
+                                   app:cardBackgroundColor="@color/primaryDarkColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
                                                        android:layout_height="match_parent">
         <TextView
                 android:id="@+id/item_title"
-                android:layout_width="403dp"
+                android:layout_width="250dp"
                 android:layout_height="28dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +25,7 @@
                 android:layout_marginStart="4dp"
         />
         <TextView
-                android:layout_width="404dp"
+                android:layout_width="wrap_content"
                 android:layout_height="21dp"
                 android:inputType="none"
                 android:ems="10"
@@ -41,11 +45,12 @@
         <TextView
                 android:text="@string/item_location"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="15dp"
                 android:id="@+id/item_location"
-                app:layout_constraintTop_toBottomOf="@+id/item_title"
-                android:layout_marginEnd="3dp" app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="31dp" android:textAlignment="viewStart"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</androidx.cardview.widget.CardView>

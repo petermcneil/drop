@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -29,10 +30,12 @@ class MainFragment : Fragment(), View.OnClickListener {
     private lateinit var con: FragmentActivity
     private lateinit var recycleView: RecyclerView
     private lateinit var welcome: TextView
+    private lateinit var face: AppCompatImageView
     private val dataset: MutableList<Drop?> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,9 +49,11 @@ class MainFragment : Fragment(), View.OnClickListener {
         fm = con.supportFragmentManager
         view.findViewById<AppCompatImageView>(R.id.f_m_settings).setOnClickListener(this)
 
-        welcome = view.findViewById<TextView>(R.id.f_m_welcome)
+        welcome = view.findViewById(R.id.f_m_welcome)
+        face = view.findViewById(R.id.f_m_face)
+        updateImage()
         val name = auth.currentUser!!.displayName
-        val message = if(name == null) {
+        val message = if (name == null) {
             "$name!"
         } else {
             "!"
@@ -79,4 +84,9 @@ class MainFragment : Fragment(), View.OnClickListener {
         DropApp.auth.signOut()
         startActivity(Intent(context, LoginActivity::class.java))
     }
+
+    private fun updateImage() {
+        face.setImageResource(R.drawable.default_user_white)
+    }
+
 }
