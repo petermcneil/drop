@@ -14,6 +14,7 @@ class DropApp : Application() {
         lateinit var auth: FirebaseAuth
         lateinit var locationUtil : LocationUtil
         lateinit var firebaseUtil : FirebaseUtil
+        lateinit var appContext : Context
     }
 
     override fun onCreate() {
@@ -22,5 +23,6 @@ class DropApp : Application() {
         locationUtil = LocationUtil(this.getSystemService(Context.LOCATION_SERVICE) as LocationManager, FusedLocationProviderClient(this))
         locationUtil.updateLastKnownLocation()
         firebaseUtil = FirebaseUtil()
+        appContext = this
     }
 }

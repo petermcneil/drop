@@ -1,6 +1,8 @@
 package mcneil.peter.drop.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +14,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
+import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
@@ -70,12 +73,23 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         fm.beginTransaction().add(R.id.main_frag_container, createDrop, "2").hide(createDrop).commit()
         fm.beginTransaction().add(R.id.main_frag_container, mainFragment, "1").commit()
 
+        updateUI()
+    }
+
+    private fun updateUI() {
+        if (DropApp.auth.currentUser == null) {
+            var started = false
+            getSharedPreferences("LoginActivity", Context.MODE_PRIVATE).getBoolean("active", started)
+            if(!started) {
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
+        }
         startLocationUpdates()
     }
 
     override fun onResume() {
         super.onResume()
-        startLocationUpdates()
+        updateUI()
     }
 
     override fun onPause() {
@@ -117,6 +131,7 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
 
     ///////////////////////// Unused overrides /////////////////////////
     override fun onKeyMoved(key: String?, location: GeoLocation?) {}
+
     override fun onKeyExited(key: String?) {}
     override fun onGeoQueryError(ignored: DatabaseError?) {}
     override fun onGeoQueryReady() {}

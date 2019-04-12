@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import mcneil.peter.drop.DropApp
+import mcneil.peter.drop.DropApp.Companion.appContext
 import mcneil.peter.drop.R
 import mcneil.peter.drop.model.Drop
 
@@ -55,7 +56,7 @@ class FeedAdapter(private val dataSet: MutableList<Drop?>) : RecyclerView.Adapte
         if (drop != null) {
             viewHolder.title.text = drop.title
             viewHolder.summary.text = drop.message
-            viewHolder.created.text = drop.formatedDate()
+            viewHolder.created.text =  appContext.getString(R.string.item_created, drop.formatedDate())
             viewHolder.location.text = drop.location.toString()
         }
     }

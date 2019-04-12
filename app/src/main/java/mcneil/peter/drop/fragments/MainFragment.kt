@@ -1,37 +1,39 @@
 package mcneil.peter.drop.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import mcneil.peter.drop.DropApp
+import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
+import mcneil.peter.drop.activities.LoginActivity
+import mcneil.peter.drop.activities.SettingsActivity
 import mcneil.peter.drop.adapter.FeedAdapter
 import mcneil.peter.drop.model.Drop
 
 class MainFragment : Fragment(), View.OnClickListener {
-    private val TAG = "MainFragment"
+    private val TAG = this.javaClass.simpleName
 
     private lateinit var fm: FragmentManager
-    private lateinit var myContext: FragmentActivity
+    private lateinit var con: FragmentActivity
     private lateinit var recycleView: RecyclerView
-    private lateinit var dataset: MutableList<Drop?>
+    private lateinit var welcome: TextView
+    private val dataset: MutableList<Drop?> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        dataset = mutableListOf()
     }
-
-    //    private fun initDataset() {
-    //
-    //        val drop = Drop(message = "A nice message", location = DropLocation(0.0, 0.0), ownerId = "")
-    //    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
@@ -41,24 +43,40 @@ class MainFragment : Fragment(), View.OnClickListener {
         recycleView.adapter = FeedAdapter(dataset)
         recycleView.layoutManager = LinearLayoutManager(activity)
 
-//        view.findViewById<AppCompatButton>(R.id.main_btn_create).setOnClickListener(this)
-        fm = myContext.supportFragmentManager
+        fm = con.supportFragmentManager
+        view.findViewById<AppCompatImageView>(R.id.f_m_settings).setOnClickListener(this)
+
+        welcome = view.findViewById<TextView>(R.id.f_m_welcome)
+        val name = auth.currentUser!!.displayName
+        val message = if(name == null) {
+            "$name!"
+        } else {
+            "!"
+        }
+        welcome.text = resources.getString(R.string.f_m_welcome, message)
         return view
     }
 
     override fun onAttach(context: Context?) {
-        myContext = activity as FragmentActivity
+        con = activity as FragmentActivity
         super.onAttach(context)
     }
 
     ///////////////////////// View.OnClickListener overrides /////////////////////////
     override fun onClick(v: View) {
         when (v.id) {
-//            R.id.main_btn_create -> {
-//                Log.i(TAG, "create button")
-//                fm.beginTransaction().replace(R.id.activity_main, CreateDropFragment()).addToBackStack("Create Drop")
-//                    .commit()
-//            }
+            R.id.f_m_settings -> openSettings()
         }
+    }
+
+    private fun openSettings() {
+        Log.i(TAG, "Opening settings")
+        startActivity(Intent(context, SettingsActivity::class.java))
+    }
+
+    private fun signOut() {
+        Log.i(TAG, "Signing out")
+        DropApp.auth.signOut()
+        startActivity(Intent(context, LoginActivity::class.java))
     }
 }
