@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
-import mcneil.peter.drop.activities.LoginActivity
+import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.activities.SettingsActivity
 import mcneil.peter.drop.adapter.FeedAdapter
 import mcneil.peter.drop.model.Drop

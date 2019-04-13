@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="56dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_marginBottom="215dp">
+
+        <androidx.appcompat.widget.AppCompatImageView android:src="@drawable/drop_logo"
+                                                      android:layout_width="100dp"
+                                                      android:layout_height="100dp"
+                                                      android:layout_marginBottom="24dp"
+                                                      android:layout_gravity="center_horizontal"/>
+
+        <androidx.appcompat.widget.AppCompatTextView android:layout_width="match_parent"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_marginBottom="24dp"
+                                                     android:textSize="18sp"
+                                                     android:text="@string/verification_email_sent_to"
+                                                     android:textAlignment="center"
+                                                     android:id="@+id/a_ev_email_text"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</ScrollView>

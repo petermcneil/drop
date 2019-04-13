@@ -18,6 +18,7 @@ import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
+import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.fragments.CreateDropFragment
 import mcneil.peter.drop.fragments.FindDropFragment
 import mcneil.peter.drop.fragments.MainFragment

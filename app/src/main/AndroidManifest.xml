@@ -50,13 +50,13 @@
         <activity android:name=".activities.MapActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.LoginActivity"
+        <activity android:name=".activities.login.LoginActivity"
                   android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.SettingsActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.CreateAccountActivity"
+        <activity android:name=".activities.login.CreateAccountActivity"
                   android:screenOrientation="portrait"/>
 
     </application>

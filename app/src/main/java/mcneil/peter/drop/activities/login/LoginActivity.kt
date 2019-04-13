@@ -1,4 +1,4 @@
-package mcneil.peter.drop.activities
+package mcneil.peter.drop.activities.login
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import kotlinx.android.synthetic.main.activity_login.*
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.R
+import mcneil.peter.drop.activities.MainActivity
 import mcneil.peter.drop.util.Validate
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {

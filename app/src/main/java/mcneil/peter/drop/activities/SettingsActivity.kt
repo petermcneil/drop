@@ -10,6 +10,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kotlinx.android.synthetic.main.activity_settings.*
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.R
+import mcneil.peter.drop.activities.login.LoginActivity
 
 class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = this.javaClass.simpleName
