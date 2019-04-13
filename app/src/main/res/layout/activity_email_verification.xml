@@ -28,6 +28,14 @@
                                                      android:text="@string/verification_email_sent_to"
                                                      android:textAlignment="center"
                                                      android:id="@+id/a_ev_email_text"/>
+
+        <androidx.appcompat.widget.AppCompatTextView android:layout_width="match_parent"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_marginBottom="24dp"
+                                                     android:textSize="12sp"
+                                                     android:text="@string/email_not_arrived"
+                                                     android:textAlignment="center"
+                                                     android:id="@+id/a_ev_email_not_arrived"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>

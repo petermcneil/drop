@@ -18,6 +18,8 @@
     <string name="verify_email">Verify Email</string>
     <string name="email_verified">Email verified</string>
     <string name="auth_failed">Authentication Failed</string>
+    <string name="resend_email">Resending email</string>
+    <string name="cannot_resend">Cannot resend yet</string>
 
     <string name="login_main_text">Drop</string>
     <string name="loading">Loading</string>
@@ -61,5 +63,6 @@
     <string name="creating_account">Creating account…</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="verification_email_sent_to">Verification email sent to %s</string>
+    <string name="email_not_arrived">Email not arrived? Send again</string>
 
 </resources>

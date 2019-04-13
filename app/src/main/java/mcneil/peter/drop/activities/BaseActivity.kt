@@ -7,6 +7,7 @@ import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
+import mcneil.peter.drop.util.HideKeyboard
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -26,6 +27,7 @@ open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         }
 
         locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
+        HideKeyboard(this)
     }
 
     override fun onPermissionsDenied(requestCode: Int, list: List<String>) {

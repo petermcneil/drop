@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
@@ -14,10 +15,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
-import mcneil.peter.drop.DropApp
+import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
+import mcneil.peter.drop.activities.login.EmailVerificationActivity
 import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.fragments.CreateDropFragment
 import mcneil.peter.drop.fragments.FindDropFragment
@@ -78,14 +80,22 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
     }
 
     private fun updateUI() {
-        if (DropApp.auth.currentUser == null) {
+        if (auth.currentUser == null) {
             var started = false
             getSharedPreferences("LoginActivity", Context.MODE_PRIVATE).getBoolean("active", started)
             if(!started) {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
+        } else {
+            auth.currentUser!!.reload()
+            if(!auth.currentUser!!.isEmailVerified) {
+                Log.d(TAG,"Email not verified")
+                Toast.makeText(this, "Email is not verified, check your emails", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, EmailVerificationActivity::class.java))
+            } else {
+                startLocationUpdates()
+            }
         }
-        startLocationUpdates()
     }
 
     override fun onResume() {

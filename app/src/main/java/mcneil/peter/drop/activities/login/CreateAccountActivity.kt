@@ -7,18 +7,14 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.android.synthetic.main.activity_email_verification.*
 import kotlinx.android.synthetic.main.activity_login.input_email
 import kotlinx.android.synthetic.main.activity_login.input_password
 import kotlinx.android.synthetic.main.activity_signup.*
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
-import mcneil.peter.drop.activities.MainActivity
 import mcneil.peter.drop.util.Validate
-import org.jetbrains.anko.doAsync
 
 class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = this.javaClass.simpleName
@@ -84,25 +80,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
             if (task.isSuccessful) {
                 Toast.makeText(this, getString(R.string.toast_email_sent, auth.currentUser!!.email), Toast.LENGTH_SHORT)
                     .show()
-                setContentView(R.layout.activity_email_verification)
-                a_ev_email_text.text = getString(R.string.verification_email_sent_to, auth.currentUser!!.email)
-                doAsync {
-                    var verified = false
-                    while (!verified) {
-                        Thread.sleep(500)
-                        auth.currentUser?.reload()
-                        val reloadedUser = auth.currentUser
-                        if (reloadedUser != null && reloadedUser.isEmailVerified) {
-                            Log.d(TAG, "Email is verified")
-                            verified = true
-                            Toast.makeText(this@CreateAccountActivity, getString(R.string.verify_email), Toast.LENGTH_LONG).show()
-                            val intent = Intent(this@CreateAccountActivity, MainActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            ContextCompat.startActivity(this@CreateAccountActivity, intent, null)
-                        }
-
-                    }
-                }
+                startActivity(Intent(this, EmailVerificationActivity::class.java))
             } else {
                 Log.e(TAG, "sendEmailVerification", task.exception)
                 Toast.makeText(this, getString(R.string.toast_email_fail), Toast.LENGTH_SHORT).show()

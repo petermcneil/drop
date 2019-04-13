@@ -59,5 +59,8 @@
         <activity android:name=".activities.login.CreateAccountActivity"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".activities.login.EmailVerificationActivity"
+                  android:screenOrientation="portrait"/>
+
     </application>
 </manifest>
