@@ -1,6 +1,5 @@
 package mcneil.peter.drop.util
 
-import android.widget.EditText
 import mcneil.peter.drop.model.Either
 
 class Validate {
@@ -46,27 +45,18 @@ class Validate {
             }
         }
 
-        fun emailPasswordForm(fieldEmail: EditText, fieldPassword: EditText): Boolean {
+        fun emailPasswordForm(email: String, password: String): Boolean {
             var valid = true
 
-            val email = fieldEmail.text.toString()
-            val validEmail = Validate.email(email)
-
-            val password = fieldPassword.text.toString()
-            val validPassword = Validate.password(password)
+            val validEmail = email(email)
+            val validPassword = password(password)
 
             if (validEmail is Either.Left) {
-                fieldEmail.error = validEmail.value
                 valid = false
-            } else {
-                fieldEmail.error = null
             }
 
             if (validPassword is Either.Left) {
-                fieldPassword.error = validPassword.value
                 valid = false
-            } else {
-                fieldPassword.error = null
             }
 
             return valid

@@ -48,13 +48,16 @@
         </activity>
 
         <activity android:name=".activities.MapActivity"
-                  android:screenOrientation="portrait" />
+                  android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.LoginActivity"
-                  android:screenOrientation="portrait" />
+                  android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.SettingsActivity"
-                  android:screenOrientation="portrait" />
+                  android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.CreateAccountActivity"
+                  android:screenOrientation="portrait"/>
 
     </application>
 </manifest>

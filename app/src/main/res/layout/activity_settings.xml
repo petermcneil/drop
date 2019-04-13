@@ -9,9 +9,16 @@
               style="@style/DropTheme.NoTitleActivity">
 
     <androidx.appcompat.widget.AppCompatButton
-            android:text="@string/login_button"
+            android:text="@string/edit_profile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/a_s_login_button"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/a_s_edit_profile_button"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:text="@string/sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/a_s_signout_button"/>
 
     <androidx.appcompat.widget.AppCompatButton
             android:text="@string/license_button"

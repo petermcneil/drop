@@ -51,20 +51,19 @@ class MainFragment : Fragment(), View.OnClickListener {
 
         welcome = view.findViewById(R.id.f_m_welcome)
         face = view.findViewById(R.id.f_m_face)
-        updateImage()
-        val name = auth.currentUser!!.displayName
-        val message = if (name == null) {
-            "$name!"
-        } else {
-            "!"
-        }
-        welcome.text = resources.getString(R.string.f_m_welcome, message)
+        updateUI()
+
         return view
     }
 
     override fun onAttach(context: Context?) {
         con = activity as FragmentActivity
         super.onAttach(context)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUI()
     }
 
     ///////////////////////// View.OnClickListener overrides /////////////////////////
@@ -85,8 +84,17 @@ class MainFragment : Fragment(), View.OnClickListener {
         startActivity(Intent(context, LoginActivity::class.java))
     }
 
-    private fun updateImage() {
+    private fun updateUI() {
         face.setImageResource(R.drawable.default_user_white)
+        val name = auth.currentUser?.displayName
+        val message = if (name != null) {
+            " $name!"
+        } else {
+            "!"
+        }
+
+        Log.d(TAG, "Updating message: $message")
+        welcome.text = resources.getString(R.string.f_m_welcome, message)
     }
 
 }
