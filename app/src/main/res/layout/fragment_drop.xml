@@ -25,10 +25,46 @@
             <androidx.appcompat.widget.AppCompatTextView
                     android:text="@string/f_drop_title_label"
                     android:textSize="24sp"
-                    android:textAllCaps="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/f_d_title"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/drop_light_dialog_text"
+                    android:background="@color/drop_light_dialog_text_background"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/f_drop_created_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_created_label"
+                    android:textSize="12sp"
+                    android:textColor="@color/drop_light_dialog_text"
+                    android:layout_marginTop="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_created"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/drop_light_dialog_text"
+                    android:background="@color/drop_light_dialog_text_background"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/f_drop_date_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_date_label"
+                    android:textSize="12sp"
+                    android:textColor="@color/drop_light_dialog_text"
+                    android:layout_marginTop="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_date"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16sp"
                     android:textColor="@color/drop_light_dialog_text"
                     android:background="@color/drop_light_dialog_text_background"/>
 
@@ -54,7 +90,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/f_d_map_label"
-                    android:layout_marginBottom="10dp"
                     android:textSize="12sp"
                     android:textColor="@color/drop_light_dialog_text"/>
 
@@ -63,7 +98,8 @@
                       android:layout_width="match_parent"
                       android:layout_height="@dimen/drop_dialog_map_height"
                       android:id="@+id/drop_dialog_map"
-                      class="com.google.android.gms.maps.SupportMapFragment" />
+                      android:layout_marginBottom="10dp"
+                      class="com.google.android.gms.maps.SupportMapFragment"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>

@@ -65,5 +65,7 @@
     <string name="f_drop_title_label">Title</string>
     <string name="f_drop_message_label">Message</string>
     <string name="f_drop_location_label">Location</string>
+    <string name="f_drop_created_label">Created by</string>
+    <string name="f_drop_date_label">Date</string>
 
 </resources>

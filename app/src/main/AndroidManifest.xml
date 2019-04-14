@@ -42,7 +42,6 @@
                 <data android:scheme="https"
                       android:host="pop.ski"
                       android:pathPrefix="/projects/drop"/>
-
             </intent-filter>
         </activity>
 

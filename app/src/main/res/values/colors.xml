@@ -12,4 +12,6 @@
     <color name="drop_light_dialog_text_background">#D3CFCF</color>
     <color name="drop_light_dialog_text">#000</color>
     <color name="drop_light_dialog_background">#E4DFDF</color>
+    <color name="drop_feed_mine">#000</color>
+    <color name="drop_feed_someones">#c48b9f</color>
 </resources>

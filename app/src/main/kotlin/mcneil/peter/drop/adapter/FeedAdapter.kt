@@ -1,17 +1,24 @@
 package mcneil.peter.drop.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.ValueEventListener
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.appContext
+import mcneil.peter.drop.DropApp.Companion.auth
+import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.R
 import mcneil.peter.drop.model.Drop
+import mcneil.peter.drop.model.User
+import org.jetbrains.anko.backgroundColor
 
 interface FeedClickListener {
     fun onItemClicked(v: View, d: Drop)
@@ -23,7 +30,7 @@ class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: 
     }
 
     init {
-        DropApp.firebaseUtil.readDrops(this)
+        DropApp.firebaseUtil.readFeedDrops(this)
     }
 
     class ViewHolder(v: View, f: FeedClickListener) : RecyclerView.ViewHolder(v) {
@@ -37,6 +44,10 @@ class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: 
             v.setOnClickListener {
                 f.onItemClicked(v, this.drop)
             }
+        }
+
+        fun setBackground(colour: Int) {
+            this.itemView.backgroundColor = ContextCompat.getColor(appContext, colour)
         }
     }
 
@@ -52,16 +63,56 @@ class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: 
         viewHolder.summary.text = drop.message
         viewHolder.created.text = appContext.getString(R.string.item_created, drop.formatedDate())
         viewHolder.location.text = drop.location.toString()
+
+        if (drop.ownerId == DropApp.auth.uid) {
+            viewHolder.setBackground(R.color.drop_feed_mine)
+        } else {
+            viewHolder.setBackground(R.color.drop_feed_someones)
+        }
     }
 
     override fun getItemCount() = dataSet.size
 
     override fun onDataChange(ds: DataSnapshot) {
-        ds.children.map { d ->
-            val drop: Drop? = d.getValue(Drop::class.java)
-            if (drop != null) {
-                dataSet.add(drop)
+        if (ds.key == auth.uid) {
+            Log.d(TAG, "Data key equal to auth id")
+            try {
+                val user: User? = ds.getValue(User::class.java)
+                user?.dropList?.map { dr ->
+                    firebaseUtil.readDrop(dr, this)
+                } ?: Log.e(TAG, "Unknown data")
+            } catch (e: DatabaseException) {
+                Log.e(TAG, "User cannot be created from data: ${e.message}")
             }
+        } else {
+            if(ds.key == "drops") {
+                Log.d(TAG, "List of drops to convert")
+                ds.children.map { d ->
+                    try {
+                        val drop: Drop? = d.getValue(Drop::class.java)
+                        if (drop != null) {
+                            Log.d(TAG, "Drop found: $drop")
+                            dataSet.add(drop)
+                        } else {
+                        }
+                    } catch (e: DatabaseException) {
+                        Log.e(TAG, "Drop cannot be created from data")
+                    }
+                }
+            } else {
+                Log.d(TAG, "Single drop")
+                try {
+                    val drop: Drop? = ds.getValue(Drop::class.java)
+                    if (drop != null) {
+                        Log.d(TAG, "Drop found: $drop")
+                        dataSet.add(drop)
+                    } else {
+                    }
+                } catch (e: DatabaseException) {
+                    Log.e(TAG, "Drop cannot be created from data")
+                }
+            }
+
         }
         this.notifyDataSetChanged()
     }

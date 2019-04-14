@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_email_verification.*
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
+import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.R
 import mcneil.peter.drop.activities.MainActivity
 import org.jetbrains.anko.doAsync
@@ -33,13 +34,13 @@ class EmailVerificationActivity : AppCompatActivity(), View.OnClickListener {
                 if (reloadedUser != null && reloadedUser.isEmailVerified) {
                     Log.d(TAG, "Email is verified")
                     verified = true
-                    Toast.makeText(this@EmailVerificationActivity, getString(R.string.verify_email), Toast.LENGTH_LONG)
-                        .show()
                     val intent = Intent(this@EmailVerificationActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     ContextCompat.startActivity(this@EmailVerificationActivity, intent, null)
                 }
             }
+            firebaseUtil.createUser()
+            Toast.makeText(this@EmailVerificationActivity, getString(R.string.email_verified), Toast.LENGTH_LONG).show()
         }
     }
 

@@ -66,6 +66,14 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val f: Fragment? = fragmentManager!!.findFragmentById(R.id.create_drop_map)
+        if (f != null) {
+            fragmentManager!!.beginTransaction().remove(f).commit()
+        }
+    }
+
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(LOCATION)
     override fun onMapReady(gMap: GoogleMap) {
