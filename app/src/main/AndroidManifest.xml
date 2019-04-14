@@ -8,7 +8,6 @@
     <uses-feature android:name="android.hardware.location.gps"/>
     <uses-feature android:name="android.hardware.location.network"/>
 
-
     <application
             android:name=".DropApp"
             android:allowBackup="true"
@@ -46,9 +45,6 @@
 
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.MapActivity"
-                  android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.login.LoginActivity"
                   android:screenOrientation="portrait"/>

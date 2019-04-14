@@ -8,7 +8,7 @@
                                                    android:orientation="vertical"
                                                    style="@style/DropTheme.NoTitleActivity"
                                                    tools:context=".activities.MainActivity"
-                                                   android:windowSoftInputMode="adjustResize" >
+                                                   android:windowSoftInputMode="adjustResize|stateHidden" >
 
     <include
             android:id="@+id/main_frag_container"

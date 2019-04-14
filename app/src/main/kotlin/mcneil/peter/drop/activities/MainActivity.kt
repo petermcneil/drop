@@ -131,7 +131,7 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
     }
 
     @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(FINE_LOCATION)
+    @AfterPermissionGranted(LOCATION)
     private fun startLocationUpdates() {
         locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationCallback, null)
     }

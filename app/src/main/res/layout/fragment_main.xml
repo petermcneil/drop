@@ -53,11 +53,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="2dp"-->
-            <!--android:background="@android:color/darker_gray"/>-->
-
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_view"
             android:layout_width="match_parent"

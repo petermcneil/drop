@@ -7,35 +7,36 @@ import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
-import mcneil.peter.drop.util.HideKeyboard
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-const val FINE_LOCATION: Int = 1231
+const val LOCATION: Int = 1231
 
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
     @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(FINE_LOCATION)
+    @AfterPermissionGranted(LOCATION)
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
 
         if (!EasyPermissions.hasPermissions(this, *permissions)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), FINE_LOCATION, *permissions)
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), LOCATION, *permissions)
         }
 
         locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
-        HideKeyboard(this)
     }
 
     override fun onPermissionsDenied(requestCode: Int, list: List<String>) {
-        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), FINE_LOCATION, *permissions)
+        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), LOCATION, *permissions)
     }
 
     @SuppressLint("MissingPermission")
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        if(requestCode == LOCATION) {
+            locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
+        }
     }
 
 
