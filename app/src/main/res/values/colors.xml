@@ -8,4 +8,8 @@
     <color name="secondaryDarkColor">#99aa00</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#000000</color>
+
+    <color name="drop_light_dialog_text_background">#D3CFCF</color>
+    <color name="drop_light_dialog_text">#000</color>
+    <color name="drop_light_dialog_background">#E4DFDF</color>
 </resources>

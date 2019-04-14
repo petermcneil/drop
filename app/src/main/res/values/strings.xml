@@ -47,9 +47,7 @@
     <string name="main_btn_create">Create a drop</string>
     <string name="item_title">Title</string>
     <string name="btn_more_txt">More</string>
-    <string name="item_summary">Summary lorem
-
-    ipsum</string>
+    <string name="item_summary">Summary lorem ipsum</string>
     <string name="item_created">Created on: %1$s</string>
     <string name="item_location">50.83509 | -0.12786</string>
     <string name="create_drop_title">Title</string>
@@ -64,5 +62,8 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="verification_email_sent_to">Verification email sent to %s</string>
     <string name="email_not_arrived">Email not arrived? Send again</string>
+    <string name="f_drop_title_label">Title</string>
+    <string name="f_drop_message_label">Message</string>
+    <string name="f_drop_location_label">Location</string>
 
 </resources>

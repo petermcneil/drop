@@ -22,3 +22,4 @@
 
 -keepattributes Signature
 -keepattributes *Annotation*
+-dontwarn com.firebase.geofire.*

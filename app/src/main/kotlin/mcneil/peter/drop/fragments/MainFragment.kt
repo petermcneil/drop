@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatImageView
@@ -18,12 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
-import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.activities.SettingsActivity
+import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.adapter.FeedAdapter
+import mcneil.peter.drop.adapter.FeedClickListener
 import mcneil.peter.drop.model.Drop
 
-class MainFragment : Fragment(), View.OnClickListener {
+class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
     private val TAG = this.javaClass.simpleName
 
     private lateinit var fm: FragmentManager
@@ -31,7 +33,7 @@ class MainFragment : Fragment(), View.OnClickListener {
     private lateinit var recycleView: RecyclerView
     private lateinit var welcome: TextView
     private lateinit var face: AppCompatImageView
-    private val dataset: MutableList<Drop?> = mutableListOf()
+    private val dataset: MutableList<Drop> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +45,11 @@ class MainFragment : Fragment(), View.OnClickListener {
 
         recycleView = view.findViewById(R.id.main_view)
 
-        recycleView.adapter = FeedAdapter(dataset)
+        recycleView.adapter = FeedAdapter(dataset, this)
         recycleView.layoutManager = LinearLayoutManager(activity)
 
         fm = con.supportFragmentManager
-        view.findViewById<AppCompatImageView>(R.id.f_m_settings).setOnClickListener(this)
+        view.findViewById<ImageView>(R.id.f_m_settings).setOnClickListener(this)
 
         welcome = view.findViewById(R.id.f_m_welcome)
         face = view.findViewById(R.id.f_m_face)
@@ -71,6 +73,11 @@ class MainFragment : Fragment(), View.OnClickListener {
         when (v.id) {
             R.id.f_m_settings -> openSettings()
         }
+    }
+
+    override fun onItemClicked(v: View, d: Drop) {
+        val dialog = DropDialogFragment.newInstance(d)
+        dialog.show(fm, "Drop")
     }
 
     private fun openSettings() {

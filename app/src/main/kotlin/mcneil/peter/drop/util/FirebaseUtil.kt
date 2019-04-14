@@ -36,6 +36,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
     }
 
     fun readDrops(listener: ValueEventListener) {
+        Log.d(TAG, String.format("Adding event listener to class: %s", listener.javaClass.simpleName))
         dropDb.addListenerForSingleValueEvent(listener)
     }
 

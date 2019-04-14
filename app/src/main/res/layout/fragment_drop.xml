@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:layout_height="@dimen/drop_dialog_height"
+                                   android:layout_width="@dimen/drop_dialog_width"
+                                   android:minWidth="@dimen/drop_dialog_width"
+                                   android:maxWidth="@dimen/drop_dialog_width"
+                                   android:minHeight="@dimen/drop_dialog_height"
+                                   android:maxHeight="@dimen/drop_dialog_height"
+                                   android:layout_margin="8dp"
+                                   app:cardCornerRadius="6dp"
+                                   app:cardElevation="6dp"
+                                   app:cardBackgroundColor="@color/drop_light_dialog_background"
+                                   app:contentPadding="10dp">
+
+    <androidx.core.widget.NestedScrollView android:layout_width="@dimen/drop_dialog_width"
+                                           android:layout_height="@dimen/drop_dialog_height"
+                                           android:background="@color/drop_light_dialog_background">
+
+        <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="match_parent"
+                                                      android:layout_height="wrap_content"
+                                                      android:orientation="vertical"
+                                                      android:background="@color/drop_light_dialog_background">
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/f_drop_title_label"
+                    android:textSize="24sp"
+                    android:textAllCaps="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_title"
+                    android:textColor="@color/drop_light_dialog_text"
+                    android:background="@color/drop_light_dialog_text_background"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/f_drop_message_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_message_label"
+                    android:textSize="12sp"
+                    android:textColor="@color/drop_light_dialog_text"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_message"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/drop_light_dialog_text"
+                    android:background="@color/drop_light_dialog_text_background"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/f_drop_location_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f_d_map_label"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/drop_light_dialog_text"/>
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:tools="http://schemas.android.com/tools"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/drop_dialog_map_height"
+                      android:id="@+id/drop_dialog_map"
+                      android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+</androidx.cardview.widget.CardView>
