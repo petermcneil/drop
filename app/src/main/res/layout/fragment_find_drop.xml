@@ -4,12 +4,17 @@
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="@dimen/fragment_container">
+    <ImageView
+            android:layout_width="98dp"
+            android:layout_height="81dp"
+            app:srcCompat="@drawable/arrow_white"
+            tools:layout_editor_absoluteY="148dp"
+            tools:layout_editor_absoluteX="141dp"
+            android:id="@+id/compass_arrow"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="148dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="141dp"
 
-    <TextView
-            android:text="FIND DROP"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="166dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="176dp"/>
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>

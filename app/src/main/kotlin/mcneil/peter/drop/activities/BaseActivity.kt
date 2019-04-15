@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -25,7 +24,7 @@ open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), LOCATION, *permissions)
         }
 
-        locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
+//        locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
     }
 
     override fun onPermissionsDenied(requestCode: Int, list: List<String>) {
@@ -35,7 +34,7 @@ open class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     @SuppressLint("MissingPermission")
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
         if(requestCode == LOCATION) {
-            locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
+//            locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
         }
     }
 

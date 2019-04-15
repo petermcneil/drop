@@ -2,6 +2,7 @@ package mcneil.peter.drop.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import mcneil.peter.drop.R
 import mcneil.peter.drop.activities.LOCATION
 import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.model.DropLocation
+import mcneil.peter.drop.model.Either
 import mcneil.peter.drop.model.getCurrentDateTime
 import pub.devrel.easypermissions.AfterPermissionGranted
 
@@ -113,19 +115,26 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
                     .show()
             } else {
                 input.map { it.value.isErrorEnabled = false }
-                val dropLocation = DropLocation(locationUtil.lastKnownLocation.latitude, locationUtil.lastKnownLocation.longitude)
-                val drop = Drop(title = titleBox.editText!!.text.toString(), message = messageBox.editText!!.text.toString(), location = dropLocation, ownerId = auth.currentUser!!.uid, createdOn = getCurrentDateTime())
+                val eitherLocation = locationUtil.lastKnownLocation()
+                if (eitherLocation is Either.Right<Location>) {
+                    val location = eitherLocation.value
+                    val dropLocation = DropLocation(location.latitude, location.longitude)
+                    val drop = Drop(title = titleBox.editText!!.text.toString(), message = messageBox.editText!!.text.toString(), location = dropLocation, ownerId = auth.currentUser!!.uid, createdOn = getCurrentDateTime())
 
-                val id = firebaseUtil.writeDrop(drop)
+                    val id = firebaseUtil.writeDrop(drop)
 
-                firebaseUtil.linkDropToLocation(id, locationUtil.lastKnownLocation)
+                    firebaseUtil.linkDropToLocation(id, location)
 
-                Log.d(tag, "Message: ${drop.message}\n Location: ${locationUtil.lastKnownLocation}")
+                    Log.d(tag, "Message: ${drop.message}\n Location: ${location}")
 
-                Snackbar.make(activity!!.findViewById(R.id.fragment_create_drop), "Drop saved", Snackbar.LENGTH_LONG)
-                    .show()
+                    Snackbar.make(activity!!.findViewById(R.id.fragment_create_drop), "Drop saved", Snackbar.LENGTH_LONG)
+                        .show()
 
-                clearUI()
+                    clearUI()
+                } else {
+                    Log.e(TAG, "Location not found")
+                }
+
             }
         } else {
             Log.d(tag, "User is not logged in so cannot create a drop")

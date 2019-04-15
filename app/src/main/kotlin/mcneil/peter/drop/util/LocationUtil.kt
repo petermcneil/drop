@@ -16,18 +16,25 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import mcneil.peter.drop.activities.LOCATION
+import mcneil.peter.drop.model.Either
 import pub.devrel.easypermissions.AfterPermissionGranted
 import kotlin.math.abs
 
-class LocationUtil(private val locationManager: LocationManager, val locationClient: FusedLocationProviderClient) : LocationCallback(){
+class LocationUtil(val locationManager: LocationManager, val locationClient: FusedLocationProviderClient) : LocationCallback() {
     private val TAG = this.javaClass.simpleName
-    lateinit var lastKnownLocation: Location
-
-    val locationRequest = LocationRequest.create()?.apply {
+    private lateinit var lastKnownLocation: Location
+    val locationRequest: LocationRequest? = LocationRequest.create()?.apply {
         interval = 1000
         fastestInterval = 1000
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
+
+    init {
+        try {
+            locationClient.requestLocationUpdates(locationRequest, this, null)
+        } catch(e :SecurityException) {}
+    }
+
 
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(LOCATION)
@@ -55,6 +62,18 @@ class LocationUtil(private val locationManager: LocationManager, val locationCli
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message)
         }
+    }
+
+    fun lastKnownLocation(): Either<String, Location> {
+        return if(lastKnownLocation == null) {
+            Either.Left("")
+        } else {
+            Either.Right(lastKnownLocation)
+        }
+    }
+
+    fun setLastKnownLocation(loc : Location) {
+        lastKnownLocation = loc
     }
 
     override fun onLocationResult(locationResult: LocationResult?) {

@@ -17,8 +17,8 @@ class MapListener(private val map: GoogleMap) : OnCompleteListener<Location> {
         if (task.isSuccessful) {
             val res = task.result
             if (res != null) {
-                locationUtil.lastKnownLocation = res
-                val loc = LatLng(locationUtil.lastKnownLocation.latitude, locationUtil.lastKnownLocation.longitude)
+                locationUtil.setLastKnownLocation(res)
+                val loc = LatLng(res.latitude, res.longitude)
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 20f))
             }
         } else {
