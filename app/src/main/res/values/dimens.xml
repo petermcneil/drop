@@ -22,6 +22,9 @@
     <dimen name="vertical_page_margin">@dimen/margin_medium</dimen>
 
     <dimen name="fragment_container">675dp</dimen>
+    <dimen name="half_container">337.5dp</dimen>
+
+    <dimen name="find_button">30sp</dimen>
 
     <!-- Drop Dialog dimens -->
     <dimen name="drop_dialog_height">400dp</dimen>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_email_verification.*
@@ -25,6 +26,7 @@ class EmailVerificationActivity : AppCompatActivity(), View.OnClickListener {
         a_ev_email_text.text = getString(R.string.verification_email_sent_to, DropApp.auth.currentUser!!.email)
 
         a_ev_email_not_arrived.setOnClickListener(this)
+        a_ev_email_no_email_access.setOnClickListener(this)
         doAsync {
             var verified = false
             while (!verified) {
@@ -34,9 +36,7 @@ class EmailVerificationActivity : AppCompatActivity(), View.OnClickListener {
                 if (reloadedUser != null && reloadedUser.isEmailVerified) {
                     Log.d(TAG, "Email is verified")
                     verified = true
-                    val intent = Intent(this@EmailVerificationActivity, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    ContextCompat.startActivity(this@EmailVerificationActivity, intent, null)
+                    this@EmailVerificationActivity.showMain()
                 }
             }
             firebaseUtil.createUser()
@@ -59,7 +59,28 @@ class EmailVerificationActivity : AppCompatActivity(), View.OnClickListener {
                         .show()
                 }
             }
+            R.id.a_ev_email_no_email_access -> {
+                AlertDialog.Builder(this).setTitle("Cancel login")
+                    .setMessage("Continuing will log you out of this email address. Requiring you to create an new account or login to an existing account.")
+                    .setPositiveButton("Logout") { _, _ ->
+                        auth.signOut()
+                        this.showLogin()
+                    }.setNegativeButton("Cancel", null).show()
+
+            }
         }
+    }
+
+    private fun showLogin() {
+        val intent = Intent(this@EmailVerificationActivity, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        ContextCompat.startActivity(this@EmailVerificationActivity, intent, null)
+    }
+
+    private fun showMain() {
+        val intent = Intent(this@EmailVerificationActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        ContextCompat.startActivity(this@EmailVerificationActivity, intent, null)
     }
 
 }

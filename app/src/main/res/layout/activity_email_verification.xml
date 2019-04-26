@@ -32,10 +32,17 @@
         <androidx.appcompat.widget.AppCompatTextView android:layout_width="match_parent"
                                                      android:layout_height="wrap_content"
                                                      android:layout_marginBottom="24dp"
-                                                     android:textSize="12sp"
+                                                     android:textSize="14sp"
                                                      android:text="@string/email_not_arrived"
                                                      android:textAlignment="center"
                                                      android:id="@+id/a_ev_email_not_arrived"/>
+
+        <androidx.appcompat.widget.AppCompatButton android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   android:layout_marginTop="100dp"
+                                                   android:text="@string/no_email_access"
+                                                   android:background="@color/drop_btn_red"
+                                                   android:id="@+id/a_ev_email_no_email_access"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>

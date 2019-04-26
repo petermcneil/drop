@@ -54,7 +54,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
         if (id != null) {
             Log.i(TAG, String.format("Creating user with id: %s", id))
             val user = User()
-            userDb.child(id).setValue(user) { databaseError, databaseReference ->
+            userDb.child(id).setValue(user) { databaseError, _ ->
                 if (databaseError != null) {
                     Log.e(TAG, "Data could not be saved: ${databaseError.message}")
                 } else {

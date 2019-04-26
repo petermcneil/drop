@@ -3,12 +3,14 @@ package mcneil.peter.drop.activities
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.firebase.database.DataSnapshot
@@ -25,6 +27,7 @@ import mcneil.peter.drop.fragments.CreateDropFragment
 import mcneil.peter.drop.fragments.FindDropFragment
 import mcneil.peter.drop.fragments.MainFragment
 import mcneil.peter.drop.model.Drop
+import mcneil.peter.drop.util.LocationUtil
 import pub.devrel.easypermissions.AfterPermissionGranted
 
 class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
@@ -42,6 +45,8 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        locationUtil = LocationUtil(this.getSystemService(Context.LOCATION_SERVICE) as LocationManager, FusedLocationProviderClient(this))
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
@@ -52,25 +57,22 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_create -> {
-                    fm.beginTransaction().hide(active).show(createDrop).commit()
-                    active = createDrop
+                    replaceFrag(createDrop)
                 }
                 R.id.menu_main -> {
-                    fm.beginTransaction().hide(active).show(mainFragment).commit()
-                    active = mainFragment
+                    replaceFrag(mainFragment)
                 }
                 R.id.menu_find -> {
-                    fm.beginTransaction().hide(active).show(findDrop).commit()
-                    active = findDrop
+                    replaceFrag(findDrop)
                 }
                 else -> {
-                    fm.beginTransaction().hide(active).show(createDrop).commit()
-                    active = createDrop
+                    replaceFrag(createDrop)
                 }
 
             }
             return@setOnNavigationItemSelectedListener true
         }
+
 
         fm.beginTransaction().add(R.id.main_frag_container, findDrop, "3").hide(findDrop).commit()
         fm.beginTransaction().add(R.id.main_frag_container, createDrop, "2").hide(createDrop).commit()
@@ -79,17 +81,23 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         updateUI()
     }
 
+    private fun replaceFrag(frag: Fragment) {
+        fm.beginTransaction().addToBackStack(frag.tag).hide(active).show(frag)
+            .addToBackStack(null).commit()
+        active = frag
+    }
+
     private fun updateUI() {
         if (auth.currentUser == null) {
             var started = false
             getSharedPreferences("LoginActivity", Context.MODE_PRIVATE).getBoolean("active", started)
-            if(!started) {
+            if (!started) {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
         } else {
             auth.currentUser!!.reload()
-            if(!auth.currentUser!!.isEmailVerified) {
-                Log.d(TAG,"Email not verified")
+            if (!auth.currentUser!!.isEmailVerified) {
+                Log.d(TAG, "Email not verified")
                 Toast.makeText(this, "Email is not verified, check your emails", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this, EmailVerificationActivity::class.java))
             } else {

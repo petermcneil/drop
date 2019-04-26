@@ -67,5 +67,8 @@
     <string name="f_drop_location_label">Location</string>
     <string name="f_drop_created_label">Created by</string>
     <string name="f_drop_date_label">Date</string>
+    <string name="f_dm_compass">Compass</string>
+    <string name="f_dm_search">Search</string>
+    <string name="no_email_access">Don\'t have access to that email?</string>
 
 </resources>

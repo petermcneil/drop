@@ -14,4 +14,7 @@
     <color name="drop_light_dialog_background">#E4DFDF</color>
     <color name="drop_feed_mine">#000</color>
     <color name="drop_feed_someones">#c48b9f</color>
+    <color name="drop_btn_compass">#FF9800</color>
+    <color name="drop_btn_search">#4CAF50</color>
+    <color name="drop_btn_red">#F44336</color>
 </resources>
