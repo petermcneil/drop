@@ -1,7 +1,8 @@
 package mcneil.peter.drop.activities
 
+import android.content.Context
 import android.graphics.Matrix
-import android.hardware.GeomagneticField
+import android.hardware.*
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
@@ -20,7 +21,32 @@ import kotlinx.android.synthetic.main.activity_find_compass.*
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 
-class FindCompassActivity : AppCompatActivity(), View.OnClickListener {
+class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEventListener {
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        //not used
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        val degree: Float = Math.round(event.values[2]).toFloat()
+
+//        tvHeading.setText("Heading: " + java.lang.Float.toString(degree) + " degrees")
+
+        // create a rotation animation (reverse turn degree degrees)
+//        val ra = RotateAnimation(currentDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+//
+//        // how long the animation will take place
+//        ra.duration = 210
+//
+//        // set the animation after the end of the reservation status
+//        ra.fillAfter = true
+
+        // Start the animation
+//        arrow.startAnimation(ra)
+
+//        rotateCompass(normalise(degree))
+        currentDegree = -degree
+    }
+
     private val TAG = this.javaClass.simpleName
     private val request = LocationRequest.create()?.apply {
         interval = 60000
@@ -30,11 +56,14 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener {
 
     private var heading: Float = 0f
     private var lastBearing: Float = 0f
+    private var currentDegree: Float = 0f
 
     private lateinit var geoField: GeomagneticField
     private lateinit var locationCallback: LocationCallback
     private lateinit var currentLocation: Location
     private lateinit var arrow: AppCompatImageView
+
+    private lateinit var sensor : SensorManager
 
     @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +97,19 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener {
         val provider = locationUtil.locationManager.getBestProvider(crta, true)
         locationUtil.locationClient.requestLocationUpdates(request, locationCallback, null)
 //        locationUtil.locationManager.requestLocationUpdates(provider, 1000, 2f, locationListener)
+
+        sensor = getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
+    override fun onResume() {
+        super.onResume()
+        sensor.registerListener(this, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensor.unregisterListener(this)
+    }
     override fun onClick(v: View?) {
         when (v!!.id) {
         }

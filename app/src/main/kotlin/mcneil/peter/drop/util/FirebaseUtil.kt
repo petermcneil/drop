@@ -42,7 +42,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
         val id: String? = auth.uid
         if (id != null) {
             Log.d(TAG, String.format("Adding event listener to class: %s", listener.javaClass.simpleName))
-            dropDb.orderByChild("ownerId").equalTo(id).addListenerForSingleValueEvent(listener)
+            dropDb.orderByChild("ownerId").equalTo(id).addValueEventListener(listener)
             userDb.child(id).addListenerForSingleValueEvent(listener)
         } else {
             Log.e(TAG, String.format("ID not valid: %s", id))

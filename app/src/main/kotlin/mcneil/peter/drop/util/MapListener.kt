@@ -19,7 +19,7 @@ class MapListener(private val map: GoogleMap) : OnCompleteListener<Location> {
             if (res != null) {
                 locationUtil.setLastKnownLocation(res)
                 val loc = LatLng(res.latitude, res.longitude)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 20f))
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16f))
             }
         } else {
             Log.d(TAG, "Current location is null. Using defaults.")

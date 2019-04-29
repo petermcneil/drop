@@ -16,11 +16,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.R
 import mcneil.peter.drop.activities.SettingsActivity
-import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.adapter.FeedAdapter
 import mcneil.peter.drop.adapter.FeedClickListener
 import mcneil.peter.drop.model.Drop
@@ -33,7 +31,7 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
     private lateinit var recycleView: RecyclerView
     private lateinit var welcome: TextView
     private lateinit var face: AppCompatImageView
-    private val dataset: MutableList<Drop> = mutableListOf()
+    private val dataset: MutableMap<String, Drop> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,12 +81,6 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
     private fun openSettings() {
         Log.i(TAG, "Opening settings")
         startActivity(Intent(context, SettingsActivity::class.java))
-    }
-
-    private fun signOut() {
-        Log.i(TAG, "Signing out")
-        DropApp.auth.signOut()
-        startActivity(Intent(context, LoginActivity::class.java))
     }
 
     private fun updateUI() {

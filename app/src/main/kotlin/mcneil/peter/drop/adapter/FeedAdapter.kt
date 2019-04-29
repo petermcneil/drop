@@ -24,7 +24,7 @@ interface FeedClickListener {
     fun onItemClicked(v: View, d: Drop)
 }
 
-class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: FeedClickListener) : RecyclerView.Adapter<FeedAdapter.ViewHolder>(), ValueEventListener {
+class FeedAdapter(private val dataSet: MutableMap<String, Drop>, private val listener: FeedClickListener) : RecyclerView.Adapter<FeedAdapter.ViewHolder>(), ValueEventListener {
     companion object {
         private const val TAG = "FeedAdapter"
     }
@@ -57,17 +57,19 @@ class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: 
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val drop: Drop = dataSet[position]
-        viewHolder.drop = drop
-        viewHolder.title.text = drop.title
-        viewHolder.summary.text = drop.message
-        viewHolder.created.text = appContext.getString(R.string.item_created, drop.formatedDate())
-        viewHolder.location.text = drop.location.toString()
+        val drop: Drop? = dataSet[dataSet.keys.toList()[(dataSet.size - 1) - position]]
+        if (drop != null) {
+            viewHolder.drop = drop
+            viewHolder.title.text = drop.title
+            viewHolder.summary.text = drop.message
+            viewHolder.created.text = appContext.getString(R.string.item_created, drop.formatedDate())
+            viewHolder.location.text = drop.location.toString()
 
-        if (drop.ownerId == DropApp.auth.uid) {
-            viewHolder.setBackground(R.color.drop_feed_mine)
-        } else {
-            viewHolder.setBackground(R.color.drop_feed_someones)
+            if (drop.ownerId == DropApp.auth.uid) {
+                viewHolder.setBackground(R.color.drop_feed_mine)
+            } else {
+                viewHolder.setBackground(R.color.drop_feed_someones)
+            }
         }
     }
 
@@ -85,16 +87,18 @@ class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: 
                 Log.e(TAG, "User cannot be created from data: ${e.message}")
             }
         } else {
-            if(ds.key == "drops") {
+            if (ds.key == "drops") {
                 Log.d(TAG, "List of drops to convert")
                 ds.children.map { d ->
                     try {
                         val drop: Drop? = d.getValue(Drop::class.java)
                         if (drop != null) {
                             Log.d(TAG, "Drop found: $drop")
-                            dataSet.add(drop)
-                        } else {
-                        }
+                            val key = d.key
+                            if (key != null) {
+                                dataSet.put(key, drop)
+                            } else { }
+                        } else { }
                     } catch (e: DatabaseException) {
                         Log.e(TAG, "Drop cannot be created from data")
                     }
@@ -105,9 +109,11 @@ class FeedAdapter(private val dataSet: MutableList<Drop>, private val listener: 
                     val drop: Drop? = ds.getValue(Drop::class.java)
                     if (drop != null) {
                         Log.d(TAG, "Drop found: $drop")
-                        dataSet.add(drop)
-                    } else {
-                    }
+                        val key = ds.key
+                        if (key != null) {
+                            dataSet[key] = drop
+                        }
+                    } else {}
                 } catch (e: DatabaseException) {
                     Log.e(TAG, "Drop cannot be created from data")
                 }
