@@ -20,7 +20,6 @@
                 android:inputType="none"
                 android:textAlignment="center"
                 android:textSize="30sp"
-                android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="118dp"
                 android:layout_marginTop="41dp"

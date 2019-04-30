@@ -16,14 +16,16 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mcneil.peter.drop.DropApp.Companion.auth
+import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.R
 import mcneil.peter.drop.activities.SettingsActivity
 import mcneil.peter.drop.adapter.FeedAdapter
 import mcneil.peter.drop.adapter.FeedClickListener
+import mcneil.peter.drop.model.ACallback
 import mcneil.peter.drop.model.Drop
+import mcneil.peter.drop.model.User
 
-class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
+class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallback<User> {
     private val TAG = this.javaClass.simpleName
 
     private lateinit var fm: FragmentManager
@@ -31,6 +33,7 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
     private lateinit var recycleView: RecyclerView
     private lateinit var welcome: TextView
     private lateinit var face: AppCompatImageView
+    private lateinit var user: User
     private val dataset: MutableMap<String, Drop> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +54,7 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
 
         welcome = view.findViewById(R.id.f_m_welcome)
         face = view.findViewById(R.id.f_m_face)
-        updateUI()
+        firebaseUtil.getUser(this)
 
         return view
     }
@@ -59,6 +62,11 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
     override fun onAttach(context: Context?) {
         con = activity as FragmentActivity
         super.onAttach(context)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateUI()
     }
 
     override fun onResume() {
@@ -78,6 +86,12 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
         dialog.show(fm, "Drop")
     }
 
+    override fun callback(ret: User) {
+        Log.d(TAG, "Callback called")
+        user = ret
+        updateUI()
+    }
+
     private fun openSettings() {
         Log.i(TAG, "Opening settings")
         startActivity(Intent(context, SettingsActivity::class.java))
@@ -85,7 +99,13 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener {
 
     private fun updateUI() {
         face.setImageResource(R.drawable.default_user_white)
-        val name = auth.currentUser?.displayName
+
+        val name = if (::user.isInitialized) {
+            user.name
+        } else {
+            null
+        }
+
         val message = if (name != null) {
             " $name!"
         } else {

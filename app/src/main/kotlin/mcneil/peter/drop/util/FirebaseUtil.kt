@@ -5,12 +5,10 @@ import android.util.Log
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.DropApp.Companion.locationUtil
+import mcneil.peter.drop.model.ACallback
 import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.model.User
 
@@ -75,6 +73,23 @@ class FirebaseUtil : GeoFire.CompletionListener {
             }
         } else {
             Log.e(TAG, "User not logged in")
+        }
+    }
+
+    fun getUser(userCallback: ACallback<User>) {
+        val id = auth.uid
+        if (id != null) {
+            userDb.child(id).addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+
+                override fun onDataChange(ds: DataSnapshot) {
+                    val user = ds.getValue(User::class.java)
+                    if(user != null) {
+                        userCallback.callback(user)
+                    }
+                }
+
+            })
         }
     }
 

@@ -126,7 +126,6 @@ class FeedAdapter(private val dataSet: MutableMap<String, Drop>, private val lis
 
         var i = tempDataSet.size - 1
         for ((key, _) in sorted) {
-            Log.d(TAG, "Position: $i : $key")
             dropPosition[key] = i
             i--
         }
