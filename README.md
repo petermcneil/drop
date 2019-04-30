@@ -5,6 +5,7 @@
     Drop
 </p>
 ---
+
 Drop will be an app where you can write a quick note or message and "dropApp it". 
 When someone else with the app goes within 10m from where you dropped your message, they will pick-up your message.
 
