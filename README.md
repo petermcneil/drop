@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="app/src/main/ic_launcher-web.png" style="max-width: 50; height: auto;"/>
+    <img src="app/src/main/ic_launcher-web.png" width="300" height="300" />
 </p>
 <p align="center">
     Drop
