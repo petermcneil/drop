@@ -53,7 +53,7 @@ class DropDialogFragment : DialogFragment(), OnMapReadyCallback {
 
         message.text = drop.message
         title.text = drop.title
-        dateCreated.text = drop.formatedDate()
+        dateCreated.text = drop.formattedDate()
         if(drop.ownerId == auth.uid) {
             createdBy.text = "You!"
         } else {

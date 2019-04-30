@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
-
-    <TextView
-            android:text="@string/f_dm_search"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              xmlns:tools="http://schemas.android.com/tools"
+                                              android:layout_width="match_parent"
+                                              android:orientation="vertical"
+                                              android:layout_height="match_parent">
+    <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:text="@string/find_search_heading"
+            android:layout_marginTop="130dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" tools:layout_editor_absoluteY="67dp"
-            tools:layout_editor_absoluteX="135dp" android:id="@+id/textView2" android:textSize="30sp"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="67dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="135dp"
-            android:layout_marginStart="135dp"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textAlignment="center" android:textSize="30sp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:text="@string/find_search_explanation"
+            android:layout_marginTop="80dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textSize="18sp" android:textAlignment="center"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/find_explore_btn"
+            android:text="@string/find_search_button"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

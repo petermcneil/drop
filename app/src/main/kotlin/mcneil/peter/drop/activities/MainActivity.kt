@@ -81,6 +81,11 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         updateUI()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     private fun replaceFrag(frag: Fragment) {
         fm.beginTransaction().addToBackStack(frag.tag).hide(active).show(frag)
             .addToBackStack(null).commit()

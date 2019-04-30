@@ -14,7 +14,7 @@ data class Drop(val title: String = "Untitled",
     }
     constructor() : this("Untitled", "", DropLocation(), "", getCurrentDateTime())
 
-    fun formatedDate(): String {
+    fun formattedDate(): String {
         val date = SimpleDateFormat(date_pattern, Locale.getDefault()).parse(createdOn)
         val formatter = SimpleDateFormat("yyyy MM dd", Locale.getDefault())
         return formatter.format(date)

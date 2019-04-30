@@ -34,7 +34,6 @@ class FindDropFragment : Fragment(), View.OnClickListener {
         view.findViewById<AppCompatButton>(R.id.f_dm_compass).setOnClickListener(this)
 
         activeFrag = this
-        //        updateFrag()
         return view
     }
 

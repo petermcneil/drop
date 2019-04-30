@@ -13,7 +13,9 @@ const val LOCATION: Int = 1231
 
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
-    private val perms = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+    private val perms = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.FOREGROUND_SERVICE)
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {

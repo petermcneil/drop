@@ -5,6 +5,7 @@ import android.util.Log
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
@@ -22,12 +23,22 @@ class FirebaseUtil : GeoFire.CompletionListener {
     private val geoFire = GeoFire(geoDb)
     private lateinit var lastKnownLocation: Location
 
+    init {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            userDb.child(userId).keepSynced(true)
+        }
+    }
 
     fun writeDrop(dropApp: Drop): String? {
         val nextRef = dropDb.push()
 
         nextRef.setValue(dropApp)
         return nextRef.key
+    }
+
+    fun writeUser(user: User, id: String) {
+        userDb.child(id).setValue(user)
     }
 
     fun readDrop(id: String?, listener: ValueEventListener) {
@@ -38,22 +49,23 @@ class FirebaseUtil : GeoFire.CompletionListener {
         }
     }
 
-    fun readFeedDrops(listener: ValueEventListener) {
+    fun readFeedDrops(dropListener: ChildEventListener, userListener: ChildEventListener) {
         val id: String? = auth.uid
         if (id != null) {
-            Log.d(TAG, String.format("Adding event listener to class: %s", listener.javaClass.simpleName))
-            dropDb.orderByChild("ownerId").equalTo(id).addValueEventListener(listener)
-            userDb.child(id).addListenerForSingleValueEvent(listener)
+            Log.d(TAG, "Adding child listener to class: ${dropListener.javaClass.simpleName}")
+            dropDb.orderByChild("ownerId").equalTo(id).addChildEventListener(dropListener)
+            Log.d(TAG, "Adding child listener to class: ${userListener.javaClass.simpleName}")
+            userDb.child(id).child("dropList").addChildEventListener(userListener)
         } else {
-            Log.e(TAG, String.format("ID not valid: %s", id))
+            Log.e(TAG, "ID not valid: $id")
         }
     }
 
     fun createUser() {
         val id = auth.uid
         if (id != null) {
-            Log.i(TAG, String.format("Creating user with id: %s", id))
-            val user = User()
+            val user = User(name = auth.currentUser?.displayName)
+            Log.d(TAG, "Creating user: $user with id: $id")
             userDb.child(id).setValue(user) { databaseError, _ ->
                 if (databaseError != null) {
                     Log.e(TAG, "Data could not be saved: ${databaseError.message}")
@@ -95,7 +107,6 @@ class FirebaseUtil : GeoFire.CompletionListener {
             query.addGeoQueryEventListener(listener)
         }
     }
-
 
     override fun onComplete(key: String?, error: DatabaseError?) {}
 }

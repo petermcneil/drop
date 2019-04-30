@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-auth:16.2.1'
     implementation 'com.google.firebase:firebase-database:16.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
     implementation 'com.firebase:geofire-android:2.3.1'

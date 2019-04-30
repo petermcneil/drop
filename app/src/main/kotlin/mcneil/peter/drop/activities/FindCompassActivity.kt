@@ -29,21 +29,21 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEve
     override fun onSensorChanged(event: SensorEvent) {
         val degree: Float = Math.round(event.values[2]).toFloat()
 
-//        tvHeading.setText("Heading: " + java.lang.Float.toString(degree) + " degrees")
+        //        tvHeading.setText("Heading: " + java.lang.Float.toString(degree) + " degrees")
 
         // create a rotation animation (reverse turn degree degrees)
-//        val ra = RotateAnimation(currentDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-//
-//        // how long the animation will take place
-//        ra.duration = 210
-//
-//        // set the animation after the end of the reservation status
-//        ra.fillAfter = true
+        //        val ra = RotateAnimation(currentDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        //
+        //        // how long the animation will take place
+        //        ra.duration = 210
+        //
+        //        // set the animation after the end of the reservation status
+        //        ra.fillAfter = true
 
         // Start the animation
-//        arrow.startAnimation(ra)
+        //        arrow.startAnimation(ra)
 
-//        rotateCompass(normalise(degree))
+        //        rotateCompass(normalise(degree))
         currentDegree = -degree
     }
 
@@ -63,7 +63,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEve
     private lateinit var currentLocation: Location
     private lateinit var arrow: AppCompatImageView
 
-    private lateinit var sensor : SensorManager
+    private lateinit var sensor: SensorManager
 
     @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +96,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEve
         crta.powerRequirement = Criteria.POWER_HIGH
         val provider = locationUtil.locationManager.getBestProvider(crta, true)
         locationUtil.locationClient.requestLocationUpdates(request, locationCallback, null)
-//        locationUtil.locationManager.requestLocationUpdates(provider, 1000, 2f, locationListener)
+        //        locationUtil.locationManager.requestLocationUpdates(provider, 1000, 2f, locationListener)
 
         sensor = getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
@@ -110,6 +110,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEve
         super.onPause()
         sensor.unregisterListener(this)
     }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
         }

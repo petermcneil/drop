@@ -70,5 +70,12 @@
     <string name="f_dm_compass">Compass</string>
     <string name="f_dm_search">Search</string>
     <string name="no_email_access">Don\'t have access to that email?</string>
+    <string name="find_search_explanation">Time for you to go and explore outside! As you explore you may find some drops to collect.</string>
+    <string name="find_search_heading">Explore!</string>
+    <string name="search_notification_description">Displayed when in exploration mode for Drops</string>
+    <string name="search_notification_name">Exploration</string>
+    <string name="find_search_button">Explore</string>
+    <string name="notification_explore_title">Drop</string>
+    <string name="notification_explore_content">Searching for drops</string>
 
 </resources>

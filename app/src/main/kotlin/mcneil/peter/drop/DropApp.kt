@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import mcneil.peter.drop.util.FirebaseUtil
 import mcneil.peter.drop.util.LocationUtil
 
-class DropApp : Application() {
+class DropApp : Application(), FirebaseAuth.AuthStateListener {
 
     companion object {
         lateinit var auth: FirebaseAuth
@@ -18,7 +18,17 @@ class DropApp : Application() {
     override fun onCreate() {
         super.onCreate()
         auth = FirebaseAuth.getInstance()
-        firebaseUtil = FirebaseUtil()
+        if (auth.currentUser != null) {
+            firebaseUtil = FirebaseUtil()
+            auth.removeAuthStateListener(this)
+        }
         appContext = this
+    }
+
+    override fun onAuthStateChanged(state: FirebaseAuth) {
+        if(state.currentUser != null) {
+            firebaseUtil = FirebaseUtil()
+            auth.removeAuthStateListener(this)
+        }
     }
 }
