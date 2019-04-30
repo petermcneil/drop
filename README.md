@@ -1,7 +1,7 @@
 <p align="center">
-    <img src="app/src/main/ic_launcher-web.png"></img>
+    <img src="app/src/main/ic_launcher-web.png" style="max-width: 50; height: auto;"/>
 </p>
-<p align="center>
+<p align="center">
     Drop
 </p>
 ---
