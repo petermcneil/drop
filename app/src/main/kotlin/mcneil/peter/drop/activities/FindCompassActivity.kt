@@ -1,153 +1,67 @@
 package mcneil.peter.drop.activities
 
-import android.content.Context
-import android.graphics.Matrix
-import android.hardware.*
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import kotlinx.android.synthetic.main.activity_find_compass.*
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 
-class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEventListener {
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        //not used
-    }
-
-    override fun onSensorChanged(event: SensorEvent) {
-        val degree: Float = Math.round(event.values[2]).toFloat()
-
-        //        tvHeading.setText("Heading: " + java.lang.Float.toString(degree) + " degrees")
-
-        // create a rotation animation (reverse turn degree degrees)
-        //        val ra = RotateAnimation(currentDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        //
-        //        // how long the animation will take place
-        //        ra.duration = 210
-        //
-        //        // set the animation after the end of the reservation status
-        //        ra.fillAfter = true
-
-        // Start the animation
-        //        arrow.startAnimation(ra)
-
-        //        rotateCompass(normalise(degree))
-        currentDegree = -degree
-    }
-
+class FindCompassActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = this.javaClass.simpleName
-    private val request = LocationRequest.create()?.apply {
-        interval = 60000
-        fastestInterval = 60000
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
 
-    private var heading: Float = 0f
-    private var lastBearing: Float = 0f
-    private var currentDegree: Float = 0f
-
-    private lateinit var geoField: GeomagneticField
     private lateinit var locationCallback: LocationCallback
     private lateinit var currentLocation: Location
-    private lateinit var arrow: AppCompatImageView
-
-    private lateinit var sensor: SensorManager
 
     @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_compass)
 
-
-        arrow = findViewById<AppCompatImageView>(R.id.compass_arrow)
-        arrow.setImageResource(R.drawable.arrow_white)
-
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
-                Log.d(TAG, "Location callback")
                 locationResult ?: return
+                Log.d(TAG, "Location callback")
                 currentLocation = locationResult.locations.first()
-                geoField = GeomagneticField(currentLocation.latitude.toFloat(), currentLocation.longitude.toFloat(), currentLocation.altitude.toFloat(), System.currentTimeMillis())
-                updateCompass()
             }
         }
-
-        // getting GPS status
-        val isGPSEnabled = locationUtil.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-
-        // getting network status
-        val isNetworkEnabled = locationUtil.locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-
-
-        val crta = Criteria()
-        crta.accuracy = Criteria.ACCURACY_FINE
-        crta.powerRequirement = Criteria.POWER_HIGH
-        val provider = locationUtil.locationManager.getBestProvider(crta, true)
-        locationUtil.locationClient.requestLocationUpdates(request, locationCallback, null)
-        //        locationUtil.locationManager.requestLocationUpdates(provider, 1000, 2f, locationListener)
-
-        sensor = getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
-    override fun onResume() {
-        super.onResume()
-        sensor.registerListener(this, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME)
+    override fun onStart() {
+        super.onStart()
+
+        val coarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        val fine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+
+        if (coarse == PackageManager.PERMISSION_GRANTED && fine == PackageManager.PERMISSION_GRANTED) {
+            val criteria = Criteria()
+            criteria.accuracy = Criteria.ACCURACY_FINE
+            criteria.bearingAccuracy = Criteria.ACCURACY_HIGH
+            val provider = locationUtil.locationManager.getBestProvider(criteria, true)
+
+            locationUtil.locationClient.requestLocationUpdates(request, locationCallback, null)
+            locationUtil.locationManager.requestLocationUpdates(provider, 500, 2f, locationListener)
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        sensor.unregisterListener(this)
+    override fun onStop() {
+        super.onStop()
+        locationUtil.locationClient.removeLocationUpdates(locationCallback)
+        locationUtil.locationManager.removeUpdates(locationListener)
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-        }
-    }
-
-    fun updateCompass() {
-        val london = Location(LocationManager.GPS_PROVIDER)
-        london.latitude = 51.507351
-        london.longitude = -0.127758
-        val bearing = currentLocation.bearingTo(london)
-        val distance = currentLocation.distanceTo(london)
-
-        if (bearing != lastBearing) {
-            lastBearing = bearing
-            Log.d(TAG, "Distance: $distance - Bearing: $bearing")
-            heading += geoField.declination
-            heading = (bearing - heading) * -1
-
-            rotateCompass(normalise(heading))
-        } else {
-            Log.d(TAG, "Bearing hasn't changed")
-        }
-    }
-
-    private fun rotateCompass(angle: Float) {
-        Log.d(TAG, "Rotating compass")
-        val matrix = Matrix()
-        compass_arrow.scaleType = ImageView.ScaleType.MATRIX
-        matrix.postRotate(angle, 100f, 100f)
-        compass_arrow.imageMatrix = matrix
-    }
-
-    private fun normalise(value: Float): Float {
-        return if (value in 0.0f..180.0f) {
-            value
-        } else {
-            180 + (180 + value)
         }
     }
 
@@ -159,10 +73,108 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, SensorEve
         override fun onLocationChanged(location: Location?) {
             Log.d(TAG, "Location changed")
             if (location != null) {
-                geoField = GeomagneticField(location.latitude.toFloat(), location.longitude.toFloat(), location.altitude.toFloat(), System.currentTimeMillis())
                 currentLocation = location
-                updateCompass()
             }
         }
     }
+
+    private val request = LocationRequest.create()?.apply {
+        interval = 500
+        fastestInterval = 500
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    //    fun updateCompass() {
+    //        if (::currentLocation.isInitialized) {
+    //            val brightonPier = Location(LocationManager.GPS_PROVIDER)
+    //            brightonPier.latitude = 50.82838
+    //            brightonPier.longitude = 0.13947
+    //
+    //
+    //            val distanceBetweenLocations = Math.round(currentLocation.distanceTo(brightonPier))
+    //            val angleBetweenLocations = normalise(currentLocation.bearingTo(brightonPier).toDouble())
+    //            val rotationAngle = normalise(anglePhoneFacing - angleBetweenLocations)
+    //
+    //            Log.i(TAG, "Distance between locations: $distanceBetweenLocations")
+    //            Log.i(TAG, "Angle between locations: $angleBetweenLocations")
+    //            Log.i(TAG, "Angle phone facing from north: $anglePhoneFacing")
+    //            Log.i(TAG, "Resulting angle: $rotationAngle")
+    //
+    //            find_compass_distance.text = getString(R.string.f_dm_compass_distance, distanceBetweenLocations)
+    //            find_compass_direction.text = getString(R.string.f_dm_compass_direction, rotationAngle)
+    //            rotateCompass(rotationAngle.toFloat())
+    //
+    //        } else {
+    //            Log.i(TAG, "Location not initialised")
+    //        }
+    //    }
+    //
+    //    private fun rotateCompass(angle: Float) {
+    //        Log.d(TAG, "Rotating compass: $angle")
+    //        val matrix = Matrix()
+    //        arrow.scaleType = ImageView.ScaleType.MATRIX
+    //        matrix.postRotate(angle, 100f, 100f)
+    //        arrow.imageMatrix = matrix
+    //    }
+    //
+    //    private fun normalise(value: Double): Double {
+    //        return if (value in 0.0f..180.0f) {
+    //            value
+    //        } else {
+    //            180 + (180 + value)
+    //        }
+    //    }
+
+
+    //Sensor stuff
+    //    private val accelerometerReading = FloatArray(3)
+    //    private val magnetometerReading = FloatArray(3)
+    //    private val rotationMatrix = FloatArray(9)
+    //    private val orientationAngles = FloatArray(3)
+
+
+    //    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+    //    override fun onSensorChanged(event: SensorEvent) {
+    //                if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+    //            System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.size)
+    //        } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
+    //            System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
+    //        }
+
+    //        updateUI()
+    //        updateOrientationAngles()
+    //        anglePhoneFacing = normalise(Math.toDegrees(rotationMatrix[0].toDouble()))
+    //        anglePhoneFacing = Math.toDegrees(rotationMatrix[0].toDouble())
+    //    }
+
+    //    fun updateUI() {
+    //        updateOrientationAngles()
+    //        anglePhoneFacing = normalise(Math.toDegrees(rotationMatrix[0].toDouble()))
+    //        updateCompass()
+    //    }
+
+    //
+    //    fun updateOrientationAngles() {
+    //        // Update rotation matrix, which is needed to update orientation angles.
+    //        SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)
+    //
+    //        // "mRotationMatrix" now has up-to-date information.
+    //
+    //        SensorManager.getOrientation(rotationMatrix, orientationAngles)
+    //
+    //        // "mOrientationAngles" now has up-to-date information.
+    //    }
+
+    //    private var anglePhoneFacing = 0.0
+
+    //    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
+    //            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI)
+    //        }
+    //        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
+    //            sensorManager.registerListener(this, magneticField, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI)
+    //        }
+
+    //        sensorManager.unregisterListener(this)
+
 }

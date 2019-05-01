@@ -68,6 +68,7 @@
     <string name="f_drop_created_label">Created by</string>
     <string name="f_drop_date_label">Date</string>
     <string name="f_dm_compass">Compass</string>
+    <string name="f_dm_compass_distance">Distance: %d</string>
     <string name="f_dm_search">Search</string>
     <string name="no_email_access">Don\'t have access to that email?</string>
     <string name="find_search_explanation">Time for you to go and explore outside! As you explore you may find some drops to collect.</string>
