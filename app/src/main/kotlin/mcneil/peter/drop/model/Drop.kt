@@ -11,6 +11,16 @@ data class Drop(val title: String = "Untitled",
 
     companion object {
         const val date_pattern = "yyyy:MM:dd:HH:mm:ss:SSS Z"
+        val comparator = Comparator<Pair<String, Drop>> { o1, o2 ->
+            val d1 = SimpleDateFormat(date_pattern, Locale.getDefault()).parse(o1.second.createdOn)
+            val d2 = SimpleDateFormat(date_pattern, Locale.getDefault()).parse(o2.second.createdOn)
+
+            when {
+                d1.before(d2) -> -1
+                d1.after(d2) -> 1
+                else -> 0
+            }
+        }
     }
     constructor() : this("Untitled", "", DropLocation(), "", getCurrentDateTime())
 

@@ -17,9 +17,6 @@ import mcneil.peter.drop.listeners.FeedDropListener
 import mcneil.peter.drop.listeners.FeedUserDropListener
 import mcneil.peter.drop.model.Drop
 import org.jetbrains.anko.backgroundColor
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.Comparator
 
 interface FeedClickListener {
     fun onItemClicked(v: View, d: Drop)
@@ -106,16 +103,7 @@ class FeedAdapter(private val dataSet: MutableMap<String, Drop>, private val lis
         }
 
         //Sort tempDataSet by date
-        val sorted = tempDataSet.toList().toSortedSet(Comparator { o1, o2 ->
-            val d1 = SimpleDateFormat(Drop.date_pattern, Locale.getDefault()).parse(o1.second.createdOn)
-            val d2 = SimpleDateFormat(Drop.date_pattern, Locale.getDefault()).parse(o2.second.createdOn)
-
-            when {
-                d1.before(d2) -> -1
-                d1.after(d2) -> 1
-                else -> 0
-            }
-        })
+        val sorted = tempDataSet.toList().toSortedSet(Drop.comparator)
 
         //Clear feed
         this.dataSet.clear()
