@@ -69,7 +69,7 @@
     <string name="f_drop_date_label">Date</string>
     <string name="f_dm_compass">Compass</string>
     <string name="f_dm_compass_distance">Distance: %dm</string>
-    <string name="f_dm_search">Search</string>
+    <string name="f_dm_search">Explore</string>
     <string name="no_email_access">Don\'t have access to that email?</string>
     <string name="find_search_explanation">Time for you to go and explore outside! In this mode, you will find drops randomly as you explore.</string>
     <string name="find_search_heading">Explore!</string>
@@ -81,5 +81,10 @@
     <string name="f_dm_compass_explanation">Time for you to go and explore outside! In this mode, you will be hunting specifically for one Drop.</string>
     <string name="find_a_drop_btn">Let\'s go!</string>
     <string name="radius_text">Radius: %.1fkm</string>
+    <string name="searching_drop">A drop has been located, go find it for yourself!</string>
+    <string name="cancel_this_drop">Can\'t find this drop?</string>
+    <string name="are_you_sure">Sure</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="cancel_drop_dialog">Are you sure you want to give up finding this Drop?</string>
 
 </resources>

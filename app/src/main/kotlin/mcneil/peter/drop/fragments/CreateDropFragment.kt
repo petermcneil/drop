@@ -25,6 +25,7 @@ import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.model.DropLocation
 import mcneil.peter.drop.model.Either
 import mcneil.peter.drop.model.getCurrentDateTime
+import mcneil.peter.drop.util.HideKeyboard
 import pub.devrel.easypermissions.AfterPermissionGranted
 
 
@@ -35,6 +36,7 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
     private lateinit var titleBox: TextInputLayout
     private lateinit var messageBox: TextInputLayout
     private lateinit var map: GoogleMap
+    private lateinit var snackBar: Snackbar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -49,8 +51,9 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
         input["message"] = messageBox
 
         view.findViewById<AppCompatButton>(R.id.create_drop_button).setOnClickListener(this)
-//        view.findViewById<View>(R.id.fragment_create_drop).setOnTouchListener(HideKeyboard(activity as Activity))
+        view.findViewById<View>(R.id.fragment_create_drop).setOnTouchListener(HideKeyboard(activity as Activity))
 
+        snackBar = Snackbar.make(view.findViewById(R.id.fragment_create_drop), "", Snackbar.LENGTH_LONG)
         val mapFragment = childFragmentManager.findFragmentById(R.id.create_drop_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
@@ -96,12 +99,12 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
                     val key = anyFail.keys.elementAt(i)
                     val value = anyFail[key]
                     when (i) {
-                        0 -> if(anyFail.count() == 1) {
+                        0 -> if (anyFail.count() == 1) {
                             sb.append(key.capitalize())
                         } else {
                             sb.append(key.capitalize())
                         }
-                        else -> if(i < anyFail.count() - 1)  {
+                        else -> if (i < anyFail.count() - 1) {
                             sb.append(" $key,")
                         } else {
                             sb.append(" and $key")
@@ -111,8 +114,7 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
                 }
 
                 sb.append(" must not be blank.")
-                Snackbar.make(activity!!.findViewById(R.id.fragment_create_drop), sb.toString(), Snackbar.LENGTH_LONG)
-                    .show()
+                snackBar.setText(sb.toString()).show()
             } else {
                 input.map { it.value.isErrorEnabled = false }
                 val eitherLocation = locationUtil.lastKnownLocation()
@@ -127,17 +129,16 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
 
                     Log.d(tag, "Message: ${drop.message}\n Location: ${location}")
 
-                    Snackbar.make(activity!!.findViewById(R.id.fragment_create_drop), "Drop saved", Snackbar.LENGTH_LONG)
-                        .show()
+                    snackBar.setText("Saved drop!").show()
 
                     clearUI()
                 } else {
                     Log.e(TAG, "Location not found")
                 }
-
             }
         } else {
-            Log.d(tag, "User is not logged in so cannot create a drop")
+            //SHOULD NEVER HAPPEN
+            Log.e(tag, "User is not logged in so cannot create a drop")
         }
     }
 

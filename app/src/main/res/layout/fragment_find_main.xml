@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:orientation="vertical"
-              android:id="@+id/fragment_find_main"
-              android:layout_height="@dimen/fragment_container">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:id="@+id/fragment_find_main"
+             android:layout_height="match_parent"
+             tools:layout_height="@dimen/fragment_container">
 
-    <androidx.appcompat.widget.AppCompatButton android:id="@+id/f_dm_search"
-                                               android:text="@string/f_dm_search"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="@dimen/half_container"
-                                               android:textSize="@dimen/find_button"
-                                               android:background="@color/drop_btn_search"/>
+    <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="match_parent"
+                                                  android:layout_height="match_parent"
+                                                  android:orientation="vertical"
+                                                  android:id="@+id/button_container">
 
-    <androidx.appcompat.widget.AppCompatButton android:id="@+id/f_dm_compass"
-                                               android:text="@string/f_dm_compass"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="@dimen/half_container"
-                                               android:background="@color/drop_btn_compass"
-                                               android:textSize="@dimen/find_button"/>
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/f_dm_search"
+                                                   android:text="@string/f_dm_search"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="@dimen/half_container"
+                                                   android:textSize="@dimen/find_button"
+                                                   android:background="@color/drop_btn_search"/>
+
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/f_dm_compass"
+                                                   android:text="@string/f_dm_compass"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="@dimen/half_container"
+                                                   android:background="@color/drop_btn_compass"
+                                                   android:textSize="@dimen/find_button"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</FrameLayout>

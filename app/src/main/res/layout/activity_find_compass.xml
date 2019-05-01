@@ -56,6 +56,16 @@
                                                android:layout_height="wrap_content"
                                                android:id="@+id/find_a_drop_btn"
                                                android:layout_marginTop="50dp"
-                                               android:text="@string/find_a_drop_btn"/>
+                                               android:text="@string/find_a_drop_btn" android:background="#2196F3"
+                                               android:textAllCaps="true"/>
+
+    <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
+                                               android:layout_gravity="center"
+                                               android:layout_height="wrap_content"
+                                               android:id="@+id/cancel_this_drop"
+                                               android:layout_marginTop="50dp"
+                                               android:text="@string/cancel_this_drop"
+                                               android:background="#F44336"
+                                               android:visibility="gone"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

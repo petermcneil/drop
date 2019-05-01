@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationCallback
@@ -28,13 +29,17 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     private lateinit var currentLocation: Location
     private lateinit var foundDrop: Drop
     private lateinit var foundDropLoc: Location
-    private lateinit var pd : ProgressDialog
+    private lateinit var pd: ProgressDialog
+    private lateinit var cancelDropDialog: AlertDialog
+
     //The "first" last call from finding a new drop
     private var lastCall = System.currentTimeMillis()
     //Map of cached drops owned by the user
     private val cachedUserDrops = mutableMapOf<String, Drop>()
     //Check that listeners haven't already started
     private var startedUpdates = false
+    //Old radius
+    private var oldRadius = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +48,13 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         pd = ProgressDialog(this)
         pd.setCancelable(false)
 
+        cancelDropDialog = AlertDialog.Builder(this).setMessage(R.string.cancel_drop_dialog)
+            .setPositiveButton(R.string.are_you_sure) { _, _ ->
+                removeSearchUI()
+            }.create()
+
         find_a_drop_btn.setOnClickListener(this)
+        cancel_this_drop.setOnClickListener(this)
         radius_text.text = getString(R.string.radius_text, progressToRadius(1))
         radius_seekbar.setOnSeekBarChangeListener(this)
     }
@@ -58,6 +69,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.find_a_drop_btn -> clickedFindADrop()
+            R.id.cancel_this_drop -> cancelDropDialog.show()
         }
     }
 
@@ -85,16 +97,14 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
      */
     private fun clickedFindADrop() {
         pd.show()
-        if(!startedUpdates) {
+        if (!startedUpdates) {
             startLocationUpdates()
         }
 
-        find_a_drop_btn.visibility = View.GONE
-        radius_seekbar.visibility = View.GONE
-        radius_text.visibility = View.GONE
+        val radius = progressToRadius(radius_seekbar.progress)
 
         //Retrieve from cache or get some new ones
-        if (cachedUserDrops.isNotEmpty()) {
+        if (cachedUserDrops.isNotEmpty() && radius == oldRadius) {
             Log.d(TAG, "clickedFindADrop: Drops cached: ${cachedUserDrops.size}")
             val key = cachedUserDrops.keys.first()
             val drop = cachedUserDrops[key]
@@ -106,6 +116,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
                 clickedFindADrop()
             }
         } else {
+            oldRadius = radius
             Log.d(TAG, "clickedFindADrop: No drops cached")
             lastCall = System.currentTimeMillis()
             doAsync {
@@ -113,7 +124,6 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
                     Thread.sleep(100)
                 }
 
-                val radius = progressToRadius(radius_seekbar.progress)
                 Log.d(TAG, "clickedFindADrop: Calling findNewDrop")
                 firebaseUtil.findNewDrop(currentLocation, this@FindCompassActivity, radius)
             }
@@ -127,12 +137,35 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     }
 
     private fun searchForFoundDropUI(drop: Drop) {
-        find_compass_distance.visibility = View.VISIBLE
-        pd.dismiss()
         Log.d(TAG, "searchForFoundDropUI: $drop")
         foundDrop = drop
         foundDropLoc = drop.location.toLocation()
+        showSearchUI()
+    }
+
+    private fun showSearchUI() {
+        find_a_drop_btn.visibility = View.GONE
+        radius_seekbar.visibility = View.GONE
+        radius_text.visibility = View.GONE
+
+        find_compass_explanation.text = getString(R.string.searching_drop)
+
+        find_compass_distance.visibility = View.VISIBLE
+        cancel_this_drop.visibility = View.VISIBLE
+
         updateSearchUI()
+        pd.dismiss()
+    }
+
+    private fun removeSearchUI() {
+        find_compass_distance.visibility = View.GONE
+        cancel_this_drop.visibility = View.GONE
+
+        find_a_drop_btn.visibility = View.VISIBLE
+        radius_seekbar.visibility = View.VISIBLE
+        radius_text.visibility = View.VISIBLE
+
+        find_compass_explanation.text = getString(R.string.find_search_explanation)
     }
 
     //Updates searching drop ui
@@ -187,6 +220,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         fastestInterval = 500
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
+
 
     private fun progressToRadius(progress: Int): Double {
         return progress * 0.1
