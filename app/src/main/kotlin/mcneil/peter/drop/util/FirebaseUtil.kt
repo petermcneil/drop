@@ -4,10 +4,12 @@ import android.location.Location
 import android.util.Log
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
+import com.firebase.geofire.GeoQuery
 import com.firebase.geofire.GeoQueryEventListener
 import com.google.firebase.database.*
 import mcneil.peter.drop.DropApp.Companion.auth
-import mcneil.peter.drop.DropApp.Companion.locationUtil
+import mcneil.peter.drop.listeners.CheckUserDropListener
+import mcneil.peter.drop.listeners.LocationDropListener
 import mcneil.peter.drop.model.ACallback
 import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.model.User
@@ -20,6 +22,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
     private val userDb = db.getReference("users/")
     private val geoFire = GeoFire(geoDb)
     private lateinit var lastKnownLocation: Location
+    private lateinit var geoQuery: GeoQuery
 
     init {
         val userId = auth.currentUser?.uid
@@ -43,7 +46,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
         if (id != null) {
             dropDb.child(id).addListenerForSingleValueEvent(listener)
         } else {
-            Log.i(TAG, "Drop id must not be null")
+            Log.d(TAG, "Drop id must not be null")
         }
     }
 
@@ -79,12 +82,12 @@ class FirebaseUtil : GeoFire.CompletionListener {
     fun getUser(userCallback: ACallback<User>) {
         val id = auth.uid
         if (id != null) {
-            userDb.child(id).addListenerForSingleValueEvent(object: ValueEventListener {
+            userDb.child(id).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {}
 
                 override fun onDataChange(ds: DataSnapshot) {
                     val user = ds.getValue(User::class.java)
-                    if(user != null) {
+                    if (user != null) {
                         userCallback.callback(user)
                     }
                 }
@@ -112,16 +115,62 @@ class FirebaseUtil : GeoFire.CompletionListener {
         }
     }
 
-    fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01, empty: Boolean = false) {
+
+    /**
+     * Starts a chain of ValueEventListeners to find a drop that
+     * the user has not found yet.
+     */
+    fun findNewDrop(location: Location, callback: ACallback<Pair<String, Drop>>, radius: Double) {
+        dropsForLocation(location, LocationDropListener(callback), radius)
+    }
+
+    private fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01, empty: Boolean = false) {
+        Log.d(TAG, "dropsForLocation: Called")
         if (!::lastKnownLocation.isInitialized) lastKnownLocation = location
-        if (locationUtil.fuzzyCheckLocation(location, lastKnownLocation) || empty) {
-            val geoLocation = GeoLocation(location.latitude, location.longitude)
 
-            val query = geoFire.queryAtLocation(geoLocation, radius)
+        val geoLocation = GeoLocation(location.latitude, location.longitude)
 
-            query.addGeoQueryEventListener(listener)
+        Log.d(TAG, "dropsForLocation: Building GeoQuery")
+        geoQuery = geoFire.queryAtLocation(geoLocation, radius)
+
+        Log.d(TAG, "dropsForLocation: Add listener")
+        geoQuery.addGeoQueryEventListener(listener)
+    }
+
+    /**
+     * Function to check if user has already collected the drop
+     */
+    fun checkUserDrop(dropId: String, callback: ACallback<Pair<String, Drop>>) {
+        val authId = auth.currentUser?.uid
+        Log.d(TAG, "checkUserDrop: called")
+
+        if (authId != null) {
+            userDb.child(authId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(de: DatabaseError) {}
+
+                override fun onDataChange(ds: DataSnapshot) {
+                    val user = ds.getValue(User::class.java)
+                    if (user != null) {
+                        Log.d(TAG, "checkUserDrop: User found")
+                        val listener = CheckUserDropListener(authId, geoQuery, callback)
+                        val dropList = user.dropList
+                        if (dropList != null) {
+                            Log.d(TAG, "checkUserDrop: Drop list isn't null")
+                            if (!dropList.contains(dropId)) {
+                                Log.d(TAG, "checkUserDrop: Drop isn't in user list")
+                                dropDb.child(dropId).addListenerForSingleValueEvent(listener)
+                            }
+                        } else {
+                            Log.d(TAG, "checkUserDrop: Drop list is empty, finding drops")
+                            dropDb.child(dropId).addListenerForSingleValueEvent(listener)
+                        }
+                    }
+
+                }
+            })
         }
     }
 
     override fun onComplete(key: String?, error: DatabaseError?) {}
+
 }

@@ -1,5 +1,7 @@
 package mcneil.peter.drop.model
 
+import android.location.Location
+import android.location.LocationManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +36,14 @@ data class Drop(val title: String = "Untitled",
 data class DropLocation(val latitude: Double = 0.0, val longitude: Double = 0.0) {
     override fun toString(): String {
         return "${latitude.format(5)}  |  ${longitude.format(5)}"
+    }
+
+    fun toLocation() : Location {
+        val location = Location(LocationManager.GPS_PROVIDER)
+        location.latitude = latitude
+        location.longitude = longitude
+
+        return location
     }
 
     fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)

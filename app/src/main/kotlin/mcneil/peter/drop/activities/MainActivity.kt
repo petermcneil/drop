@@ -1,6 +1,5 @@
 package mcneil.peter.drop.activities
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
@@ -8,17 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.firebase.geofire.GeoLocation
-import com.firebase.geofire.GeoQueryEventListener
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
 import mcneil.peter.drop.DropApp.Companion.auth
-import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
 import mcneil.peter.drop.activities.login.EmailVerificationActivity
@@ -26,13 +17,11 @@ import mcneil.peter.drop.activities.login.LoginActivity
 import mcneil.peter.drop.fragments.CreateDropFragment
 import mcneil.peter.drop.fragments.FindDropFragment
 import mcneil.peter.drop.fragments.MainFragment
-import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.util.LocationUtil
 import pub.devrel.easypermissions.AfterPermissionGranted
 
-class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
+class MainActivity : BaseActivity() {
     private val TAG = this.javaClass.simpleName
-    private lateinit var locationCallback: LocationCallback
     private val fm = supportFragmentManager
 
     private val createDrop = CreateDropFragment()
@@ -46,13 +35,6 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         setContentView(R.layout.activity_main)
 
         locationUtil = LocationUtil(this.getSystemService(Context.LOCATION_SERVICE) as LocationManager, FusedLocationProviderClient(this))
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult ?: return
-                updateDrops(locationResult)
-            }
-        }
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -78,12 +60,11 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         fm.beginTransaction().add(R.id.main_frag_container, createDrop, "2").hide(createDrop).commit()
         fm.beginTransaction().add(R.id.main_frag_container, mainFragment, "1").commit()
 
-        updateUI()
     }
 
     override fun onStart() {
         super.onStart()
-
+        updateUI()
     }
 
     private fun replaceFrag(frag: Fragment) {
@@ -92,6 +73,7 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         active = frag
     }
 
+    @AfterPermissionGranted(LOCATION)
     private fun updateUI() {
         if (auth.currentUser == null) {
             var started = false
@@ -102,11 +84,11 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
         } else {
             auth.currentUser!!.reload()
             if (!auth.currentUser!!.isEmailVerified) {
-                Log.d(TAG, "Email not verified")
+                Log.d(TAG, "updateUI: Email not verified")
                 Toast.makeText(this, "Email is not verified, check your emails", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this, EmailVerificationActivity::class.java))
             } else {
-                startLocationUpdates()
+                locationUtil.updateLastKnownLocation()
             }
         }
     }
@@ -118,47 +100,7 @@ class MainActivity : BaseActivity(), GeoQueryEventListener, ValueEventListener {
 
     override fun onPause() {
         super.onPause()
-        stopLocationUpdates()
+        locationUtil.removeLocationUpdates()
     }
-
-    ///////////////////////// GeoQueryEventListener overrides /////////////////////////
-    override fun onKeyEntered(key: String?, location: GeoLocation?) {
-        if (key != null) firebaseUtil.readDrop(key, this)
-    }
-
-    ///////////////////////// ValueEventListener overrides /////////////////////////
-    /**
-     * onDataChange gets called with each key found in the Geofire db.
-     */
-    override fun onDataChange(ds: DataSnapshot) {
-        val temp = ds.getValue(Drop::class.java)
-
-        if (temp != null) {
-            Log.d(TAG, "Adding drop to currentDrops: $temp")
-        }
-    }
-
-    ///////////////////////// Location functions /////////////////////////
-    private fun updateDrops(locationResult: LocationResult) {
-        firebaseUtil.dropsForLocation(locationResult.locations.first(), this)
-    }
-
-    @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(LOCATION)
-    private fun startLocationUpdates() {
-        locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationCallback, null)
-    }
-
-    private fun stopLocationUpdates() {
-        locationUtil.locationClient.removeLocationUpdates(locationCallback)
-    }
-
-    ///////////////////////// Unused overrides /////////////////////////
-    override fun onKeyMoved(key: String?, location: GeoLocation?) {}
-
-    override fun onKeyExited(key: String?) {}
-    override fun onGeoQueryError(ignored: DatabaseError?) {}
-    override fun onGeoQueryReady() {}
-    override fun onCancelled(ignored: DatabaseError) {}
 
 }

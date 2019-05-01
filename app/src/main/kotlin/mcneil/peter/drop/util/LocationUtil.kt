@@ -29,17 +29,16 @@ class LocationUtil(val locationManager: LocationManager, val locationClient: Fus
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
-    init {
-        try {
-            locationClient.requestLocationUpdates(locationRequest, this, null)
-        } catch(e :SecurityException) {}
-    }
-
-
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(LOCATION)
     fun updateLastKnownLocation() {
         locationClient.requestLocationUpdates(locationRequest, this, null)
+    }
+
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(LOCATION)
+    fun removeLocationUpdates() {
+        locationClient.removeLocationUpdates(this)
     }
 
     @SuppressLint("MissingPermission")
@@ -79,6 +78,7 @@ class LocationUtil(val locationManager: LocationManager, val locationClient: Fus
     override fun onLocationResult(locationResult: LocationResult?) {
         locationResult ?: return
         lastKnownLocation = locationResult.locations.first()
+        removeLocationUpdates()
     }
 
     fun fuzzyCheckLocation(location1: Location, location2: Location): Boolean {

@@ -5,6 +5,7 @@
                                               android:layout_width="match_parent"
                                               android:orientation="vertical"
                                               android:layout_height="@dimen/fragment_container">
+
     <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/f_dm_compass"
             android:layout_width="wrap_content"
@@ -15,12 +16,46 @@
             android:layout_marginTop="50dp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:text="@string/f_dm_compass_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/find_compass_distance"
-        android:textSize="25sp"
-        android:layout_marginTop="50dp"/>
+            android:text="@string/f_dm_compass_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/find_compass_distance"
+            android:textSize="25sp"
+            android:layout_marginTop="50dp"
+            android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/f_dm_compass_explanation"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/find_compass_explanation"
+            android:textSize="20sp"
+            android:layout_marginTop="50dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView android:layout_width="wrap_content"
+                                                 android:layout_height="wrap_content"
+                                                 android:id="@+id/radius_text"
+                                                 android:layout_gravity="center"
+                                                 android:layout_marginTop="50dp"
+                                                 android:text="@string/radius_text"
+                                                 android:textSize="20sp"/>
+
+    <androidx.appcompat.widget.AppCompatSeekBar android:layout_width="350dp"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="50dp"
+                                                android:layout_height="wrap_content"
+                                                android:progressTint="#FF9800"
+                                                android:max="150"
+                                                android:progress="1"
+                                                android:id="@+id/radius_seekbar"/>
+
+    <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
+                                               android:layout_gravity="center"
+                                               android:layout_height="wrap_content"
+                                               android:id="@+id/find_a_drop_btn"
+                                               android:layout_marginTop="50dp"
+                                               android:text="@string/find_a_drop_btn"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
