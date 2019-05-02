@@ -62,6 +62,15 @@
     <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
                                                android:layout_gravity="center"
                                                android:layout_height="wrap_content"
+                                               android:id="@+id/show_drop"
+                                               android:layout_marginTop="50dp"
+                                               android:text="@string/show_drop"
+                                               android:background="#4CAF50"
+                                               android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
+                                               android:layout_gravity="center"
+                                               android:layout_height="wrap_content"
                                                android:id="@+id/cancel_this_drop"
                                                android:layout_marginTop="50dp"
                                                android:text="@string/cancel_this_drop"

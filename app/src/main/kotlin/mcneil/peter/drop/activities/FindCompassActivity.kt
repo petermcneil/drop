@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -20,17 +21,22 @@ import kotlinx.android.synthetic.main.activity_find_compass.*
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
+import mcneil.peter.drop.fragments.FoundDropFragment
 import mcneil.peter.drop.model.ACallback
 import mcneil.peter.drop.model.Drop
 import org.jetbrains.anko.doAsync
+
 
 class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pair<String, Drop>>, SeekBar.OnSeekBarChangeListener {
     private val TAG = this.javaClass.simpleName
     private lateinit var currentLocation: Location
     private lateinit var foundDrop: Drop
     private lateinit var foundDropLoc: Location
+    private lateinit var dropId: String
     private lateinit var pd: ProgressDialog
     private lateinit var cancelDropDialog: AlertDialog
+    private lateinit var fm: FragmentManager
+    private lateinit var foundDropFragment: FoundDropFragment
 
     //The "first" last call from finding a new drop
     private var lastCall = System.currentTimeMillis()
@@ -41,6 +47,8 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     //Old radius
     private var oldRadius = 0.0
 
+    private var distance = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_compass)
@@ -48,6 +56,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         pd = ProgressDialog(this)
         pd.setCancelable(false)
 
+        fm = supportFragmentManager
         cancelDropDialog = AlertDialog.Builder(this).setMessage(R.string.cancel_drop_dialog)
             .setPositiveButton(R.string.are_you_sure) { _, _ ->
                 removeSearchUI()
@@ -55,38 +64,39 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
 
         find_a_drop_btn.setOnClickListener(this)
         cancel_this_drop.setOnClickListener(this)
+        show_drop.setOnClickListener(this)
         radius_text.text = getString(R.string.radius_text, progressToRadius(1))
         radius_seekbar.setOnSeekBarChangeListener(this)
     }
 
     override fun onStop() {
         super.onStop()
-        locationUtil.locationClient.removeLocationUpdates(locationCallback)
-        locationUtil.locationManager.removeUpdates(locationListener)
-        startedUpdates = false
+        removeLocationUpdates()
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.find_a_drop_btn -> clickedFindADrop()
             R.id.cancel_this_drop -> cancelDropDialog.show()
+            R.id.show_drop -> if(::foundDropFragment.isInitialized) foundDropFragment.show(fm, dropId)
         }
     }
 
     override fun callback(ret: Pair<String, Drop>) {
         Log.d(TAG, "callback: Found a drop")
-        val dropId = ret.first
+        val di = ret.first
         val drop = ret.second
         val currentCall = System.currentTimeMillis()
 
-        val diff = currentCall - lastCall
-        if (diff > 1000) {
+        val timeDiff = currentCall - lastCall
+        if (timeDiff > 1000) {
             Log.d(TAG, "callback: First 'correct' drop")
             lastCall = currentCall
+            dropId = di
             searchForFoundDropUI(drop)
         } else {
             Log.d(TAG, "callback: Storing drop for quick access")
-            cachedUserDrops[dropId] = drop
+            cachedUserDrops[di] = drop
         }
     }
 
@@ -110,6 +120,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
             val drop = cachedUserDrops[key]
             cachedUserDrops.remove(key)
             if (drop != null) {
+                dropId = key
                 searchForFoundDropUI(drop)
             } else {
                 Log.d(TAG, "clickedFindADrop: Drop was null, calling this method again")
@@ -171,10 +182,22 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     //Updates searching drop ui
     private fun updateSearchUI() {
         if (::foundDrop.isInitialized && ::currentLocation.isInitialized) {
-            val distance = Math.round(currentLocation.distanceTo(foundDropLoc))
-            //            val bearing = currentLocation.bearingTo(foundDropLoc)
+            distance = Math.round(currentLocation.distanceTo(foundDropLoc))
+            //val bearing = currentLocation.bearingTo(foundDropLoc)
 
             find_compass_distance.text = getString(R.string.f_dm_compass_distance, distance)
+
+            //If the distance is under 10m, show the drop
+            if (distance < 10000) {
+                Log.d(TAG, "updateSearchUI: User found the drop!")
+                foundDropFragment = FoundDropFragment.newInstance(foundDrop, dropId)
+                foundDropFragment.show(fm, dropId)
+                removeLocationUpdates()
+
+                //Gives a way to go back if mis-click
+                show_drop.visibility = View.VISIBLE
+                cancel_this_drop.visibility = View.GONE
+            }
         }
     }
 
@@ -193,6 +216,13 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
             locationUtil.locationManager.requestLocationUpdates(provider, 500, 2f, locationListener)
         }
     }
+
+    private fun removeLocationUpdates() {
+        locationUtil.locationClient.removeLocationUpdates(locationCallback)
+        locationUtil.locationManager.removeUpdates(locationListener)
+        startedUpdates = false
+    }
+
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {

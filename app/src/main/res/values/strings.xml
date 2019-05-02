@@ -86,5 +86,8 @@
     <string name="are_you_sure">Sure</string>
     <string name="cancel_dialog">Cancel</string>
     <string name="cancel_drop_dialog">Are you sure you want to give up finding this Drop?</string>
+    <string name="show_drop">Show drop</string>
+    <string name="keep_it">Keep it</string>
+    <string name="leave_it">Leave it</string>
 
 </resources>

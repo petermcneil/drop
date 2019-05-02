@@ -20,7 +20,6 @@ import mcneil.peter.drop.model.Drop
 
 class DropDialogFragment : DialogFragment(), OnMapReadyCallback {
     private val TAG = this.javaClass.simpleName
-    private lateinit var vie: View
 
     companion object {
         fun newInstance(drop: Drop): DropDialogFragment {
