@@ -2,6 +2,7 @@ package mcneil.peter.drop.activities.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -72,6 +73,10 @@ class EmailVerificationActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showLogin() {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().apply {
+            putBoolean(DropApp.LOGGED_IN_PREF, false)
+            apply()
+        }
         val intent = Intent(this@EmailVerificationActivity, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         ContextCompat.startActivity(this@EmailVerificationActivity, intent, null)

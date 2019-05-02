@@ -3,6 +3,7 @@ package mcneil.peter.drop.activities.login
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -78,6 +79,11 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         user?.sendEmailVerification()?.addOnCompleteListener(this) { task ->
             progress.dismiss()
             if (task.isSuccessful) {
+                PreferenceManager.getDefaultSharedPreferences(this).edit().apply {
+                    Log.d(TAG, "Logged in has happened")
+                    putBoolean(DropApp.LOGGED_IN_PREF, true)
+                    apply()
+                }
                 Toast.makeText(this, getString(R.string.toast_email_sent, auth.currentUser!!.email), Toast.LENGTH_SHORT)
                     .show()
                 startActivity(Intent(this, EmailVerificationActivity::class.java))

@@ -15,7 +15,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
@@ -27,7 +26,6 @@ import mcneil.peter.drop.model.Either
 import mcneil.peter.drop.model.getCurrentDateTime
 import mcneil.peter.drop.util.HideKeyboard
 import pub.devrel.easypermissions.AfterPermissionGranted
-
 
 class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback {
     private val TAG = this.javaClass.simpleName
@@ -85,7 +83,7 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
         map = gMap
         map.mapType = GoogleMap.MAP_TYPE_TERRAIN
 
-        DropApp.locationUtil.showLocationOnMap(activity as Activity, map)
+        locationUtil.showLocationOnMap(activity as Activity, map)
     }
 
     private fun dropMessage() {

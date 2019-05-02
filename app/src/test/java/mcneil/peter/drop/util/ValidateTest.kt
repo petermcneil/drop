@@ -49,7 +49,7 @@ class ValidateTest {
     @Test
     fun passwordValid() {
         val p1 = Validate.password("12345678")
-        if(p1 is Either.Right) {
+        if (p1 is Either.Right) {
             assert(p1.value)
         }
     }
@@ -59,5 +59,6 @@ class ValidateTest {
         val p1 = Validate.password("1234567")
         if (p1 is Either.Right) {
             fail()
-        } }
+        }
+    }
 }

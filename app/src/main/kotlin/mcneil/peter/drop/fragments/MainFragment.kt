@@ -30,6 +30,7 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallb
 
     private lateinit var fm: FragmentManager
     private lateinit var con: FragmentActivity
+    private lateinit var feedAdapter: FeedAdapter
     private lateinit var recycleView: RecyclerView
     private lateinit var welcome: TextView
     private lateinit var face: AppCompatImageView
@@ -39,6 +40,7 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        feedAdapter = FeedAdapter(dataset, this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,15 +48,14 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallb
 
         recycleView = view.findViewById(R.id.main_view)
 
-        recycleView.adapter = FeedAdapter(dataset, this)
-        recycleView.layoutManager = LinearLayoutManager(activity)
+        recycleView.adapter = feedAdapter
+        recycleView.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager
 
         fm = con.supportFragmentManager
         view.findViewById<ImageView>(R.id.f_m_settings).setOnClickListener(this)
 
         welcome = view.findViewById(R.id.f_m_welcome)
         face = view.findViewById(R.id.f_m_face)
-        firebaseUtil.getUser(this)
 
         return view
     }
@@ -66,6 +67,8 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallb
 
     override fun onStart() {
         super.onStart()
+        Log.d(TAG, "onStart: Trying to get User")
+        firebaseUtil.getUser(this)
         updateUI()
     }
 
@@ -87,17 +90,24 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallb
     }
 
     override fun callback(ret: User) {
-        Log.d(TAG, "Callback called")
+        Log.d(TAG, "callback: User found")
         user = ret
         updateUI()
     }
 
     private fun openSettings() {
-        Log.i(TAG, "Opening settings")
+        Log.i(TAG, "openSettings: Clicked starting transition")
         startActivity(Intent(context, SettingsActivity::class.java))
     }
 
     private fun updateUI() {
+        if (::feedAdapter.isInitialized) {
+            Log.d(TAG, "updateUI: Feed Adapter is initialised")
+            feedAdapter.generateFeedDrops()
+        } else {
+            Log.d(TAG, "updateUI: Feed Adapter is not initialised")
+        }
+
         face.setImageResource(R.drawable.default_user_white)
 
         val name = if (::user.isInitialized) {
@@ -112,7 +122,7 @@ class MainFragment : Fragment(), View.OnClickListener, FeedClickListener, ACallb
             "!"
         }
 
-        Log.d(TAG, "Updating message: $message")
+        Log.d(TAG, "updateUI: Updating message '$message'")
         welcome.text = resources.getString(R.string.f_m_welcome, message)
     }
 

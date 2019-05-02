@@ -1,9 +1,9 @@
 package mcneil.peter.drop.activities.login
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -35,15 +35,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        val sp = getSharedPreferences("LoginActivity", Context.MODE_PRIVATE)
-        sp.edit().putBoolean("active", true).apply()
         updateUI()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        val sp = getSharedPreferences("LoginActivity", Context.MODE_PRIVATE)
-        sp.edit().putBoolean("active", false).apply()
     }
 
     override fun onClick(v: View?) {
@@ -82,6 +74,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun updateUI() {
         val user = DropApp.auth.currentUser
         if (user != null) {
+            Log.d(TAG, "updateUI: User is logged in")
+            PreferenceManager.getDefaultSharedPreferences(this).edit().apply {
+                Log.d(TAG, "updateUI: Logged in has happened")
+                putBoolean(DropApp.LOGGED_IN_PREF, true)
+                apply()
+            }
+
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             ContextCompat.startActivity(this, intent, null)

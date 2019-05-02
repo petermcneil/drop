@@ -2,14 +2,12 @@ package mcneil.peter.drop.model
 
 import android.location.Location
 import android.location.LocationManager
+import androidx.annotation.Keep
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class Drop(val title: String = "Untitled",
-                val message: String,
-                val location : DropLocation,
-                val ownerId: String,
-                val createdOn: String = getCurrentDateTime()) {
+@Keep
+data class Drop(val title: String = "Untitled", val message: String, val location: DropLocation, val ownerId: String, val createdOn: String = getCurrentDateTime()) {
 
     companion object {
         const val date_pattern = "yyyy:MM:dd:HH:mm:ss:SSS Z"
@@ -24,6 +22,7 @@ data class Drop(val title: String = "Untitled",
             }
         }
     }
+
     constructor() : this("Untitled", "", DropLocation(), "", getCurrentDateTime())
 
     fun formattedDate(): String {
@@ -33,12 +32,13 @@ data class Drop(val title: String = "Untitled",
     }
 }
 
+@Keep
 data class DropLocation(val latitude: Double = 0.0, val longitude: Double = 0.0) {
     override fun toString(): String {
         return "${latitude.format(5)}  |  ${longitude.format(5)}"
     }
 
-    fun toLocation() : Location {
+    fun toLocation(): Location {
         val location = Location(LocationManager.GPS_PROVIDER)
         location.latitude = latitude
         location.longitude = longitude

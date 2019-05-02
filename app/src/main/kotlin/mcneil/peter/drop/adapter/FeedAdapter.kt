@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.appContext
+import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.R
 import mcneil.peter.drop.listeners.FeedDropListener
 import mcneil.peter.drop.listeners.FeedUserDropListener
@@ -29,8 +30,6 @@ class FeedAdapter(private val dataSet: MutableMap<String, Drop>, private val lis
     private var firstRun = 0
 
     init {
-        val feedDrop = FeedDropListener(this)
-        DropApp.firebaseUtil.readFeedDrops(feedDrop, FeedUserDropListener(this))
         firstRun = dataSet.size - 1
     }
 
@@ -130,6 +129,10 @@ class FeedAdapter(private val dataSet: MutableMap<String, Drop>, private val lis
             dataSet.remove(id)
             this.notifyItemRemoved(position)
         }
+    }
+
+    fun generateFeedDrops() {
+        firebaseUtil.readFeedDrops(FeedDropListener(this), FeedUserDropListener(this))
     }
 
     override fun getItemCount() = dataSet.size

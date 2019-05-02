@@ -13,9 +13,7 @@ const val LOCATION: Int = 1231
 
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
-    private val perms = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                Manifest.permission.FOREGROUND_SERVICE)
+    private val perms = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,25 +30,10 @@ open class BaseActivity : AppCompatActivity() {
 
         if (!EasyPermissions.hasPermissions(this, *perms)) {
             EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), LOCATION, *perms)
+        } else {
+            locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
         }
-
-        locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
     }
-
-//    override fun onPermissionsDenied(requestCode: Int, list: List<String>) {
-//        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms.toList())) {
-//            AppSettingsDialog.Builder(this).build().show()
-//        }
-//        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), LOCATION, *perms)
-//    }
-//
-//    @SuppressLint("MissingPermission")
-//    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-//        if(requestCode == LOCATION) {
-//            locationUtil.locationClient.requestLocationUpdates(locationUtil.locationRequest, locationUtil, null)
-//        }
-//    }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

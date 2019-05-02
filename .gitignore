@@ -13,3 +13,6 @@ google_maps_api.xml
 google-services.json
 
 release/
+.idea/caches/
+app/libs/
+app/src/debug/

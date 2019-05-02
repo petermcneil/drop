@@ -33,12 +33,9 @@ class FindSearchActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_find_search)
 
         createNotificationChannel()
-        explorationNot = NotificationCompat.Builder(this, EXPLORATION_NOT)
-            .setSmallIcon(R.drawable.drop_logo)
+        explorationNot = NotificationCompat.Builder(this, EXPLORATION_NOT).setSmallIcon(R.drawable.drop_logo)
             .setContentTitle(getString(R.string.notification_explore_title))
-            .setContentText(getString(R.string.notification_explore_content))
-            .setAutoCancel(false)
-            .setOngoing(true)
+            .setContentText(getString(R.string.notification_explore_content)).setAutoCancel(false).setOngoing(true)
 
         find_explore_btn.setOnClickListener(this)
 

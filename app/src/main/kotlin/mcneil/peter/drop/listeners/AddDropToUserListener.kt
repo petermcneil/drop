@@ -20,7 +20,7 @@ class AddDropToUserListener(private val dropId: String) : ValueEventListener {
             val list = user.dropList
             if (list != null) {
                 Log.d(TAG, "List already exists")
-                if(!list.contains(dropId)) {
+                if (!list.contains(dropId)) {
                     val updatedList = list.toMutableList().apply { add(dropId) }
 
                     updateUser(user, updatedList, ds.key)

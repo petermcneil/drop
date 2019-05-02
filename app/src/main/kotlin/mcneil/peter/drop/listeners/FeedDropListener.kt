@@ -85,7 +85,7 @@ class FeedUserDropListener(private val feedAdapter: FeedAdapter) : ChildEventLis
 
     override fun onChildRemoved(ds: DataSnapshot) {
         val dropId = ds.getValue(String::class.java)
-        if(dropId != null) {
+        if (dropId != null) {
             Log.d(TAG, "Drop ($dropId) removed from user")
             feedAdapter.removeDrop(dropId)
         }

@@ -4,7 +4,7 @@
     <string name="title_activity_map">Map</string>
     <string name="filter_title_drop">IntentFilter</string>
 
-    <string name="permission_rationale_location">Permission rationale</string>
+    <string name="permission_rationale_location">Location is needed part of this app. Drops are tagged with their location when created. This is also required to find drops that other users have created.</string>
 
     <string name="dec_drop_logo">Drop Logo</string>
 
@@ -71,14 +71,18 @@
     <string name="f_dm_compass_distance">Distance: %dm</string>
     <string name="f_dm_search">Randomly find a drop</string>
     <string name="no_email_access">Don\'t have access to that email?</string>
-    <string name="find_search_explanation">Time for you to go and explore outside! In this mode, you will find drops randomly as you explore.</string>
+    <string name="find_search_explanation">Time for you to go and explore outside! In this mode, you will find drops
+        randomly as you explore.
+    </string>
     <string name="find_search_heading">Explore!</string>
     <string name="search_notification_description">Displayed when in exploration mode for Drops</string>
     <string name="search_notification_name">Exploration</string>
     <string name="find_search_button">Explore</string>
     <string name="notification_explore_title">Drop</string>
     <string name="notification_explore_content">Searching for drops</string>
-    <string name="f_dm_compass_explanation">Time for you to go and explore outside! In this mode, you will be hunting specifically for one Drop.</string>
+    <string name="f_dm_compass_explanation">Time for you to go and explore outside! In this mode, you will be hunting
+        specifically for one Drop.
+    </string>
     <string name="find_a_drop_btn">Let\'s go!</string>
     <string name="radius_text">Radius: %.1fkm</string>
     <string name="searching_drop">A drop has been located, go find it for yourself!</string>
