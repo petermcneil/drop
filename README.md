@@ -2,7 +2,7 @@
     <img src="app/src/main/ic_launcher-web.png" width="100" height="100" />
 </p>
 <p align="center">
-    Drop
+<a href="https://github.com/petermcneil/drop/releases"><img src="https://img.shields.io/github/release/petermcneil/drop.svg"/></a>
 </p>
 
 ---
