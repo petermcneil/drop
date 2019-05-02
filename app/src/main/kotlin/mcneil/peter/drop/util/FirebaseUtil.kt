@@ -124,7 +124,7 @@ class FirebaseUtil : GeoFire.CompletionListener {
         dropsForLocation(location, LocationDropListener(callback), radius)
     }
 
-    private fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01, empty: Boolean = false) {
+    private fun dropsForLocation(location: Location, listener: GeoQueryEventListener, radius: Double = 0.01) {
         Log.d(TAG, "dropsForLocation: Called")
         if (!::lastKnownLocation.isInitialized) lastKnownLocation = location
 

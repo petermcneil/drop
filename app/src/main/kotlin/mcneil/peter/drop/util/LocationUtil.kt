@@ -63,9 +63,9 @@ class LocationUtil(val locationManager: LocationManager, val locationClient: Fus
         }
     }
 
-    fun lastKnownLocation(): Either<String, Location> {
-        return if(lastKnownLocation == null) {
-            Either.Left("")
+    fun getLastKnownLocation(): Either<String, Location> {
+        return if(::lastKnownLocation.isInitialized) {
+            Either.Left("Not initialised")
         } else {
             Either.Right(lastKnownLocation)
         }

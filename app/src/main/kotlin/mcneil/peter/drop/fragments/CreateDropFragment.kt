@@ -117,7 +117,7 @@ class CreateDropFragment : Fragment(), View.OnClickListener, OnMapReadyCallback 
                 snackBar.setText(sb.toString()).show()
             } else {
                 input.map { it.value.isErrorEnabled = false }
-                val eitherLocation = locationUtil.lastKnownLocation()
+                val eitherLocation = locationUtil.getLastKnownLocation()
                 if (eitherLocation is Either.Right<Location>) {
                     val location = eitherLocation.value
                     val dropLocation = DropLocation(location.latitude, location.longitude)

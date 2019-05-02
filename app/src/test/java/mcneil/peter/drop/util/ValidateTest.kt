@@ -1,6 +1,7 @@
 package mcneil.peter.drop.util
 
-import org.junit.Assert.assertFalse
+import mcneil.peter.drop.model.Either
+import org.junit.Assert.fail
 import org.junit.Test
 
 /**
@@ -12,24 +13,51 @@ class ValidateTest {
 
     @Test
     fun emailValid() {
-        assert(Validate.email("harry@example.com").first)
-        assert(Validate.email("harry@pop.ski").first)
+        val ex = Validate.email("harry@example.com")
+        if (ex is Either.Right) {
+            assert(ex.value)
+        } else {
+            fail()
+        }
+
+        val pop = Validate.email("harry@pop.ski")
+        if (pop is Either.Right) {
+            assert(pop.value)
+        } else {
+            fail()
+        }
     }
 
     @Test
     fun emailInvalid() {
-        assertFalse(Validate.email("harry@").first)
-        assertFalse(Validate.email("harry@com").first)
-        assertFalse(Validate.email("harry@example.").first)
+        val t1 = Validate.email("harry@")
+        val t2 = Validate.email("harry@com")
+        val t3 = Validate.email("harry@example.")
+
+        if (t1 is Either.Right) {
+            fail()
+        }
+        if (t2 is Either.Right) {
+            fail()
+        }
+        if (t3 is Either.Right) {
+            fail()
+        }
+
     }
 
     @Test
     fun passwordValid() {
-        assert(Validate.password("12345678").first)
+        val p1 = Validate.password("12345678")
+        if(p1 is Either.Right) {
+            assert(p1.value)
+        }
     }
 
     @Test
     fun passwordInvalid() {
-        assertFalse(Validate.password("1234567").first)
-    }
+        val p1 = Validate.password("1234567")
+        if (p1 is Either.Right) {
+            fail()
+        } }
 }
