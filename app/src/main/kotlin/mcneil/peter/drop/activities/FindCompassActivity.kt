@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_find_compass.*
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
@@ -25,10 +26,14 @@ import mcneil.peter.drop.fragments.FoundDropFragment
 import mcneil.peter.drop.model.ACallback
 import mcneil.peter.drop.model.Drop
 import org.jetbrains.anko.doAsync
+import java.util.concurrent.Future
 
 
 class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pair<String, Drop>>, SeekBar.OnSeekBarChangeListener {
     private val TAG = this.javaClass.simpleName
+    private val TIMEOUT_MILLISECONDS = 10000L
+    private val TIME_DIFF = 500
+
     private lateinit var currentLocation: Location
     private lateinit var foundDrop: Drop
     private lateinit var foundDropLoc: Location
@@ -37,6 +42,8 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     private lateinit var cancelDropDialog: AlertDialog
     private lateinit var fm: FragmentManager
     private lateinit var foundDropFragment: FoundDropFragment
+    private lateinit var timeout: Future<Unit>
+    private lateinit var snackbar: Snackbar
 
     //The "first" last call from finding a new drop
     private var lastCall = System.currentTimeMillis()
@@ -48,6 +55,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     private var oldRadius = 0.0
 
     private var distance = 0
+    private var callbackDisabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +75,8 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         show_drop.setOnClickListener(this)
         radius_text.text = getString(R.string.radius_text, progressToRadius(1))
         radius_seekbar.setOnSeekBarChangeListener(this)
+
+        snackbar = Snackbar.make(findViewById(android.R.id.content), "Couldn't find a drop, try increasing the radius", Snackbar.LENGTH_LONG)
     }
 
     override fun onStop() {
@@ -78,25 +88,31 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         when (v!!.id) {
             R.id.find_a_drop_btn -> clickedFindADrop()
             R.id.cancel_this_drop -> cancelDropDialog.show()
-            R.id.show_drop -> if(::foundDropFragment.isInitialized) foundDropFragment.show(fm, dropId)
+            R.id.show_drop -> if (::foundDropFragment.isInitialized) foundDropFragment.show(fm, dropId)
         }
     }
 
     override fun callback(ret: Pair<String, Drop>) {
-        Log.d(TAG, "callback: Found a drop")
-        val di = ret.first
-        val drop = ret.second
-        val currentCall = System.currentTimeMillis()
-
-        val timeDiff = currentCall - lastCall
-        if (timeDiff > 1000) {
-            Log.d(TAG, "callback: First 'correct' drop")
-            lastCall = currentCall
-            dropId = di
-            searchForFoundDropUI(drop)
+        if (::timeout.isInitialized && !timeout.isDone) {
+            timeout.cancel(true)
+        } else if (callbackDisabled) {
+            Log.d(TAG, "callback: Disabled because timeout has been reached")
         } else {
-            Log.d(TAG, "callback: Storing drop for quick access")
-            cachedUserDrops[di] = drop
+            Log.d(TAG, "callback: Found a drop")
+            val di = ret.first
+            val drop = ret.second
+            val currentCall = System.currentTimeMillis()
+
+            val timeDiff = currentCall - lastCall
+            if (timeDiff > TIME_DIFF) {
+                Log.d(TAG, "callback: First 'correct' drop")
+                lastCall = currentCall
+                dropId = di
+                searchForFoundDropUI(drop)
+            } else {
+                Log.d(TAG, "callback: Storing drop for quick access")
+                cachedUserDrops[di] = drop
+            }
         }
     }
 
@@ -106,6 +122,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
      * Hides the previous content.
      */
     private fun clickedFindADrop() {
+        callbackDisabled = false
         pd.show()
         if (!startedUpdates) {
             startLocationUpdates()
@@ -136,7 +153,20 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
                 }
 
                 Log.d(TAG, "clickedFindADrop: Calling findNewDrop")
+                val timeBefore = System.currentTimeMillis()
                 firebaseUtil.findNewDrop(currentLocation, this@FindCompassActivity, radius)
+
+                //Start a timeout for finding a drop
+                //If the
+                timeout = doAsync {
+                    var timeNow = System.currentTimeMillis()
+                    while ((timeNow - timeBefore) < TIMEOUT_MILLISECONDS) {
+                        timeNow = System.currentTimeMillis()
+                    }
+                    callbackDisabled = true
+                    pd.cancel()
+                    snackbar.show()
+                }
             }
         }
     }

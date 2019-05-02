@@ -29,6 +29,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/f_d_title"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/drop_light_dialog_text"
                     android:background="@color/drop_light_dialog_text_background"/>
 
@@ -93,12 +94,10 @@
                     android:textSize="12sp"
                     android:textColor="@color/drop_light_dialog_text"/>
 
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                      xmlns:tools="http://schemas.android.com/tools"
-                      android:layout_width="match_parent"
+            <fragment android:layout_width="match_parent"
                       android:layout_height="@dimen/drop_dialog_map_height"
                       android:id="@+id/drop_dialog_map"
-                      android:layout_marginBottom="10dp"
+                      android:layout_marginBottom="50dp"
                       class="com.google.android.gms.maps.SupportMapFragment"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
