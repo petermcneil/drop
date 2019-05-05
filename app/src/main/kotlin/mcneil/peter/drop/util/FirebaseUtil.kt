@@ -6,6 +6,7 @@ import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
 import com.firebase.geofire.GeoQueryEventListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import mcneil.peter.drop.DropApp.Companion.auth
 import mcneil.peter.drop.listeners.CheckUserDropListener
@@ -14,7 +15,7 @@ import mcneil.peter.drop.model.ACallback
 import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.model.User
 
-class FirebaseUtil : GeoFire.CompletionListener {
+class FirebaseUtil : GeoFire.CompletionListener, FirebaseAuth.AuthStateListener {
     private val TAG = this.javaClass.canonicalName
     private val db = FirebaseDatabase.getInstance()
     private val dropDb = db.getReference("drops/")
@@ -25,9 +26,14 @@ class FirebaseUtil : GeoFire.CompletionListener {
     private lateinit var geoQuery: GeoQuery
 
     init {
+        Log.d(TAG, "init: Checking logged in status")
         val userId = auth.currentUser?.uid
         if (userId != null) {
+            Log.d(TAG, "init: User logged in, keeping data synced.")
             userDb.child(userId).keepSynced(true)
+        } else {
+            Log.d(TAG, "init: User not logged in, adding auth state listener")
+            auth.addAuthStateListener(this)
         }
     }
 
@@ -168,6 +174,17 @@ class FirebaseUtil : GeoFire.CompletionListener {
 
                 }
             })
+        }
+    }
+
+    override fun onAuthStateChanged(state: FirebaseAuth) {
+        Log.d(TAG, "authStateChanged: Called")
+        val user = state.currentUser
+        if (user != null) {
+            Log.d(TAG, "authStateChanged: User logged in, keeping data synced.")
+            userDb.child(user.uid).keepSynced(true)
+            Log.d(TAG, "authStateChanged: Removing auth state listener")
+            auth.removeAuthStateListener(this)
         }
     }
 

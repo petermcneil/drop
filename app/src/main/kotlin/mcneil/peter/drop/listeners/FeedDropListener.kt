@@ -41,11 +41,11 @@ class FeedDropListener(private val feedAdapter: FeedAdapter) : ChildEventListene
     private fun onDataChange(ds: DataSnapshot) {
         val dataSet = mutableMapOf<String, Drop>()
         if (ds.key == "drops") {
-            Log.d(TAG, "List of drops to convert")
+            Log.v(TAG, "List of drops to convert")
             ds.children.map { d ->
                 val drop: Drop? = d.getValue(Drop::class.java)
                 if (drop != null) {
-                    Log.d(TAG, "Drop found: $drop")
+                    Log.v(TAG, "Drop found: $drop")
                     val key = d.key
                     if (key != null) {
                         dataSet[key] = drop
@@ -53,10 +53,10 @@ class FeedDropListener(private val feedAdapter: FeedAdapter) : ChildEventListene
                 }
             }
         } else {
-            Log.d(TAG, "Single drop")
+            Log.v(TAG, "Single drop")
             val drop: Drop? = ds.getValue(Drop::class.java)
             if (drop != null) {
-                Log.d(TAG, "Drop found: $drop")
+                Log.v(TAG, "Drop found: $drop")
                 val key = ds.key
                 if (key != null) {
                     dataSet[key] = drop

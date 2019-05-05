@@ -94,7 +94,7 @@ class FeedAdapter(private val dataSet: MutableMap<String, Drop>, private val lis
     }
 
     fun updateDataset(dropMap: Map<String, Drop>) {
-        Log.d(TAG, "Updating dataset and view")
+        Log.v(TAG, "Updating dataset and view")
         //Creates a copy of the dataset for modification
         val tempDataSet = dataSet.toMutableMap()
         for ((key, value) in dropMap) {

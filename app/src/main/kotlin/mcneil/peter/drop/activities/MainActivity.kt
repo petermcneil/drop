@@ -39,19 +39,10 @@ class MainActivity : BaseActivity() {
 
             bottom_navigation.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
-                    R.id.menu_create -> {
-                        replaceFrag(createDrop)
-                    }
-                    R.id.menu_main -> {
-                        replaceFrag(mainFragment)
-                    }
-                    R.id.menu_find -> {
-                        replaceFrag(findDrop)
-                    }
-                    else -> {
-                        replaceFrag(createDrop)
-                    }
-
+                    R.id.menu_create -> replaceFrag(createDrop)
+                    R.id.menu_main -> replaceFrag(mainFragment)
+                    R.id.menu_find -> replaceFrag(findDrop)
+                    else -> replaceFrag(createDrop)
                 }
                 return@setOnNavigationItemSelectedListener true
             }
@@ -72,7 +63,18 @@ class MainActivity : BaseActivity() {
         updateUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateUI()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        locationUtil.removeLocationUpdates()
+    }
+
     private fun replaceFrag(frag: Fragment) {
+        Log.d(TAG, "replaceFrag: Replacing frag ${active.javaClass.simpleName} with ${frag.javaClass.simpleName}")
         fm.beginTransaction().addToBackStack(frag.tag).hide(active).show(frag).addToBackStack(null).commit()
         active = frag
     }
@@ -92,16 +94,6 @@ class MainActivity : BaseActivity() {
                 locationUtil.updateLastKnownLocation()
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateUI()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        locationUtil.removeLocationUpdates()
     }
 
 }

@@ -33,6 +33,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     private val TAG = this.javaClass.simpleName
     private val TIMEOUT_MILLISECONDS = 10000L
     private val TIME_DIFF = 500
+    private val DISTANCE_TO_DROP = 10
 
     private lateinit var currentLocation: Location
     private lateinit var foundDrop: Drop
@@ -218,7 +219,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
             find_compass_distance.text = getString(R.string.f_dm_compass_distance, distance)
 
             //If the distance is under 10m, show the drop
-            if (distance < 10000) {
+            if (distance < DISTANCE_TO_DROP) {
                 Log.d(TAG, "updateSearchUI: User found the drop!")
                 foundDropFragment = FoundDropFragment.newInstance(foundDrop, dropId)
                 foundDropFragment.show(fm, dropId)
