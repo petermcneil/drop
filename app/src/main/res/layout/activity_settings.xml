@@ -10,7 +10,8 @@
             android:text="@string/edit_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/a_s_edit_profile_button"/>
+            android:id="@+id/a_s_edit_profile_button"
+            android:visibility="gone"/>
 
     <androidx.appcompat.widget.AppCompatButton
             android:text="@string/sign_out"
