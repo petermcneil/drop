@@ -1,14 +1,20 @@
 package mcneil.peter.drop.util
 
+import android.content.Context
+import android.content.Intent
 import android.location.Location
+import android.preference.PreferenceManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
 import com.firebase.geofire.GeoQueryEventListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.DropApp.Companion.auth
+import mcneil.peter.drop.activities.MainActivity
 import mcneil.peter.drop.listeners.CheckUserDropListener
 import mcneil.peter.drop.listeners.LocationDropListener
 import mcneil.peter.drop.model.ACallback
@@ -22,6 +28,7 @@ class FirebaseUtil : GeoFire.CompletionListener, FirebaseAuth.AuthStateListener 
     private val geoDb = db.getReference("geofire/")
     private val userDb = db.getReference("users/")
     private val geoFire = GeoFire(geoDb)
+    private lateinit var userId : String
     private lateinit var lastKnownLocation: Location
     private lateinit var geoQuery: GeoQuery
 
@@ -177,6 +184,19 @@ class FirebaseUtil : GeoFire.CompletionListener, FirebaseAuth.AuthStateListener 
         }
     }
 
+    fun signOut(context : Context) {
+        Log.d(TAG, "signOut: Signing out")
+        PreferenceManager.getDefaultSharedPreferences(context).edit().apply {
+            Log.d(TAG, "updateUI: Logged in has happened")
+            putBoolean(DropApp.LOGGED_IN_PREF, false)
+            apply()
+        }
+        auth.signOut()
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        ContextCompat.startActivity(context, intent, null)
+    }
+
     override fun onAuthStateChanged(state: FirebaseAuth) {
         Log.d(TAG, "authStateChanged: Called")
         val user = state.currentUser
@@ -184,7 +204,6 @@ class FirebaseUtil : GeoFire.CompletionListener, FirebaseAuth.AuthStateListener 
             Log.d(TAG, "authStateChanged: User logged in, keeping data synced.")
             userDb.child(user.uid).keepSynced(true)
             Log.d(TAG, "authStateChanged: Removing auth state listener")
-            auth.removeAuthStateListener(this)
         }
     }
 

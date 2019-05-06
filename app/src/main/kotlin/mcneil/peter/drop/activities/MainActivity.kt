@@ -74,7 +74,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun replaceFrag(frag: Fragment) {
-        Log.d(TAG, "replaceFrag: Replacing frag ${active.javaClass.simpleName} with ${frag.javaClass.simpleName}")
+        Log.v(TAG, "replaceFrag: Replacing frag ${active.javaClass.simpleName} with ${frag.javaClass.simpleName}")
         fm.beginTransaction().addToBackStack(frag.tag).hide(active).show(frag).addToBackStack(null).commit()
         active = frag
     }
@@ -82,17 +82,28 @@ class MainActivity : BaseActivity() {
     @AfterPermissionGranted(LOCATION)
     private fun updateUI() {
         Log.d(TAG, "updateUI: Called")
-        val user = auth.currentUser
-        if (user != null) {
-            user.reload()
-            if (!user.isEmailVerified) {
-                Log.d(TAG, "updateUI: Email not verified")
-                Toast.makeText(this, "Email is not verified, check your emails", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, EmailVerificationActivity::class.java))
-            } else {
-                Log.d(TAG, "updateUI: Requesting to update last known location")
-                locationUtil.updateLastKnownLocation()
+
+        Log.d(TAG, "updateUI: Checking logged in state")
+        loggedIn = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DropApp.LOGGED_IN_PREF, false)
+
+        if (loggedIn) {
+            Log.d(TAG, "updateUI: User is logged in")
+            val user = auth.currentUser
+
+            if (user != null) {
+                user.reload()
+                if (!user.isEmailVerified) {
+                    Log.d(TAG, "updateUI: Email not verified")
+                    Toast.makeText(this, "Email is not verified, check your emails", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this, EmailVerificationActivity::class.java))
+                } else {
+                    Log.d(TAG, "updateUI: Requesting to update last known location")
+                    locationUtil.updateLastKnownLocation()
+                }
             }
+        } else {
+            Log.d(TAG, "updateUI: Not logged in, starting login activity.")
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
