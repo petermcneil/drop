@@ -102,5 +102,8 @@
     <string name="welcome_message_1">Welcome to Drop!</string>
     <string name="welcome_message_2">The app where you go on a treasure hunt for messages</string>
     <string name="welcome_message_3">Log in or create an account below</string>
+    <string name="forgot_button">Forgotten password?</string>
+    <string name="reset_pass_email">Password reset will be sent to the email address: %s</string>
+    <string name="toast_password_reset">Email reset sent to %s</string>
 
 </resources>

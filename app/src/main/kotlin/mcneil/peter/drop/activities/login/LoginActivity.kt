@@ -1,6 +1,7 @@
 package mcneil.peter.drop.activities.login
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -18,6 +19,7 @@ import mcneil.peter.drop.util.Validate
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = this.javaClass.simpleName
+    private lateinit var resetPasswordDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,18 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         a_login_create.setOnClickListener(this)
         a_login_button.setOnClickListener(this)
+        a_forgot_button.setOnClickListener(this)
+
+        resetPasswordDialog = AlertDialog.Builder(this)
+            .setPositiveButton("Reset") { _, _ ->
+                run {
+                    val email = input_email.text.toString()
+                    Log.d(TAG, "passwordDialog: Email $email")
+                    DropApp.auth.sendPasswordResetEmail(email)
+                    Toast.makeText(this, getString(R.string.toast_password_reset, email), Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setMessage(getString(R.string.reset_pass_email, input_email.text.toString())).create()
         updateUI()
     }
 
@@ -38,16 +52,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         updateUI()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Log.d(TAG, "onBackPressed: Closing app")
-        finish()
-    }
-
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.a_login_create -> openSignUp()
             R.id.a_login_button -> signIn(input_email.text.toString(), input_password.text.toString())
+            R.id.a_forgot_button -> resetPassword()
         }
     }
 
@@ -68,13 +77,19 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 if (task.exception is FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(this, getString(R.string.toast_password_wrong), Toast.LENGTH_SHORT).show()
                     Log.w(TAG, "signInWithEmail:failure:passwordWrong")
-
+                    a_forgot_button.visibility = View.VISIBLE
                 } else {
                     Toast.makeText(this, getString(R.string.toast_auth_failed), Toast.LENGTH_SHORT).show()
                     Log.w(TAG, "signInWithEmail:failure:unknown", task.exception)
                 }
             }
         }
+    }
+
+    private fun resetPassword() {
+        Log.d(TAG, "resetPassword: Showing dialog")
+        resetPasswordDialog.setMessage(getString(R.string.reset_pass_email, input_email.text.toString()))
+        resetPasswordDialog.show()
     }
 
     private fun updateUI() {

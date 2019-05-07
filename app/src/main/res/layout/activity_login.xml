@@ -39,7 +39,6 @@
                                                      android:textAlignment="center" android:textSize="16sp"/>
 
 
-
         <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
                                                                android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_email"
@@ -65,7 +64,16 @@
                                                    android:layout_marginBottom="24dp"
                                                    android:padding="12dp"
                                                    android:text="@string/login_button"
-                                                   android:id="@+id/a_login_button"/>
+                                                   android:id="@+id/a_login_button"
+                                                   android:background="#4CAF50"/>
+
+        <androidx.appcompat.widget.AppCompatButton android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   android:layout_marginBottom="24dp"
+                                                   android:text="@string/forgot_button"
+                                                   android:id="@+id/a_forgot_button"
+                                                   android:background="#F44336"
+                                                   android:visibility="gone"/>
 
         <androidx.appcompat.widget.AppCompatTextView android:id="@+id/a_login_create"
                                                      android:layout_width="fill_parent"
