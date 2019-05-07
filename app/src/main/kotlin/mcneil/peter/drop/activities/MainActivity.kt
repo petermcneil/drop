@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import mcneil.peter.drop.DropApp
@@ -103,7 +104,9 @@ class MainActivity : BaseActivity() {
             }
         } else {
             Log.d(TAG, "updateUI: Not logged in, starting login activity.")
-            startActivity(Intent(this, LoginActivity::class.java))
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            ContextCompat.startActivity(this, intent, null)
         }
     }
 

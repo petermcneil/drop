@@ -7,9 +7,10 @@
 
 ---
 
-Drop will be an app where you can write a quick note or message and "drop it". 
-When someone else with the app goes within 10m from where you dropped your message, they will pick-up your message.
+Drop is an app that encourages users to spend less time on their phone and more time exploring outside. Users write messages and “drop” them in the real world for other users to find. Drop is a mixture of a treasure hunt and content creation tool. A user may choose to post a message about an interesting location, comment on an event happening, or share a story about a special location to them.
 
-Drop aims to aid the cause to spend more time outdoors, giving users a reason to head out and 
-explore by providing a platform to share content about highly localised areas. Drop achieves this by giving users options to “drop” a message in the world and other users can find these drops
-by exploring outdoors, incentivising exploration.
+
+Drops are found through random exploration or via a specific hunting mode. When a message has been found, a user can choose to add it to their collection or find a new one. In hunting mode, a drop is found in the world and the user is shown its direction and their distance from the drop. In exploration mode, when a user moves around the world they may find a drop randomly.
+
+
+Written in Kotlin and backed by Firebase Authentication, Firebase Realtime Database, and Geofire.

@@ -38,6 +38,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         updateUI()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Log.d(TAG, "onBackPressed: Closing app")
+        finish()
+    }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.a_login_create -> openSignUp()
