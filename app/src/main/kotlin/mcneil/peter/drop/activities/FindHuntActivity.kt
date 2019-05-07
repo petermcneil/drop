@@ -192,6 +192,7 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
         find_hunt_explanation.text = getString(R.string.searching_drop)
 
         find_hunt_distance.visibility = View.VISIBLE
+        find_hunt_bearing.visibility = View.VISIBLE
         cancel_this_drop.visibility = View.VISIBLE
 
         updateSearchUI()
@@ -200,6 +201,7 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
 
     private fun removeSearchUI() {
         find_hunt_distance.visibility = View.GONE
+        find_hunt_bearing.visibility = View.GONE
         cancel_this_drop.visibility = View.GONE
 
         find_a_drop_btn.visibility = View.VISIBLE
@@ -213,9 +215,10 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
     private fun updateSearchUI() {
         if (::foundDrop.isInitialized && ::currentLocation.isInitialized) {
             distance = Math.round(currentLocation.distanceTo(foundDropLoc))
-            //val bearing = currentLocation.bearingTo(foundDropLoc)
+            val bearing = currentLocation.bearingTo(foundDropLoc)
 
-            find_hunt_distance.text = getString(R.string.f_dm_compass_distance, distance)
+            find_hunt_distance.text = getString(R.string.f_dm_hunt_distance, distance)
+            find_hunt_bearing.text = getString(R.string.f_dm_hunt_bearing, bearing)
 
             //If the distance is under 10m, show the drop
             if (distance < DISTANCE_TO_DROP) {
