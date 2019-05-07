@@ -67,25 +67,29 @@
     <string name="f_drop_location_label">Location</string>
     <string name="f_drop_created_label">Created by</string>
     <string name="f_drop_date_label">Date</string>
-    <string name="f_dm_compass">Find a specific drop</string>
+    <string name="f_dm_compass">Hunt</string>
     <string name="f_dm_compass_distance">Distance: %dm</string>
-    <string name="f_dm_search">Randomly find a drop</string>
+    <string name="f_dm_search">Explore</string>
     <string name="no_email_access">Don\'t have access to that email?</string>
     <string name="find_search_explanation">Time for you to go and explore outside! In this mode, you will find drops
         randomly as you explore.
     </string>
+
+    <string name="safety_message_short">Be safe and good luck!</string>
     <string name="find_search_heading">Explore!</string>
     <string name="search_notification_description">Displayed when in exploration mode for Drops</string>
     <string name="search_notification_name">Exploration</string>
     <string name="find_search_button">Explore</string>
     <string name="notification_explore_title">Drop</string>
     <string name="notification_explore_content">Searching for drops</string>
-    <string name="f_dm_compass_explanation">Time for you to go and explore outside! In this mode, you will be hunting
-        specifically for one Drop.
+    <string name="f_dm_compass_explanation">Time for you to go and explore outside! In this mode, you will be on the hunt
+        for a specific drop.
     </string>
     <string name="find_a_drop_btn">Let\'s go!</string>
     <string name="radius_text">Radius: %.1fkm</string>
-    <string name="searching_drop">A drop has been located, go find it for yourself!</string>
+    <string name="searching_drop">A drop has been located.
+
+        Go find it for yourself!</string>
     <string name="cancel_this_drop">Can\'t find this drop?</string>
     <string name="are_you_sure">Sure</string>
     <string name="cancel_dialog">Cancel</string>
@@ -94,5 +98,8 @@
     <string name="keep_it">Keep it</string>
     <string name="leave_it">Leave it</string>
     <string name="found_the_drop">Found the drop!</string>
+    <string name="welcome_message_1">Welcome to Drop!</string>
+    <string name="welcome_message_2">The app where you go on a treasure hunt for messages</string>
+    <string name="welcome_message_3">Log in or create an account below</string>
 
 </resources>

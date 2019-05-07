@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.snackbar.Snackbar
 import mcneil.peter.drop.R
-import mcneil.peter.drop.activities.FindCompassActivity
+import mcneil.peter.drop.activities.FindHuntActivity
 
 class FindDropFragment : Fragment(), View.OnClickListener {
     private val TAG = this.javaClass.simpleName
@@ -46,12 +46,12 @@ class FindDropFragment : Fragment(), View.OnClickListener {
                 if (::exploreSnack.isInitialized) {
                     exploreSnack.show()
                 }
-                //                val intent = Intent(context, FindSearchActivity::class.java)
+                //                val intent = Intent(context, FindExploreActivity::class.java)
                 //                startActivity(intent)
             }
             R.id.f_dm_compass -> {
                 Log.d(TAG, "Showing compass activity")
-                val intent = Intent(context, FindCompassActivity::class.java)
+                val intent = Intent(context, FindHuntActivity::class.java)
                 startActivity(intent)
             }
         }

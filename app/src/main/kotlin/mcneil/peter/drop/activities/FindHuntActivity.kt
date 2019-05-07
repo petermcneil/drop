@@ -18,7 +18,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_find_compass.*
+import kotlinx.android.synthetic.main.activity_find_hunt.*
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.DropApp.Companion.locationUtil
 import mcneil.peter.drop.R
@@ -28,8 +28,7 @@ import mcneil.peter.drop.model.Drop
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.Future
 
-
-class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pair<String, Drop>>, SeekBar.OnSeekBarChangeListener {
+class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pair<String, Drop>>, SeekBar.OnSeekBarChangeListener {
     private val TAG = this.javaClass.simpleName
     private val TIMEOUT_MILLISECONDS = 10000L
     private val TIME_DIFF = 500
@@ -60,7 +59,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_find_compass)
+        setContentView(R.layout.activity_find_hunt)
 
         pd = ProgressDialog(this)
         pd.setCancelable(false)
@@ -155,7 +154,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
 
                 Log.d(TAG, "clickedFindADrop: Calling findNewDrop")
                 val timeBefore = System.currentTimeMillis()
-                firebaseUtil.findNewDrop(currentLocation, this@FindCompassActivity, radius)
+                firebaseUtil.findNewDrop(currentLocation, this@FindHuntActivity, radius)
 
                 //Start a timeout for finding a drop
                 //If the
@@ -190,9 +189,9 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         radius_seekbar.visibility = View.GONE
         radius_text.visibility = View.GONE
 
-        find_compass_explanation.text = getString(R.string.searching_drop)
+        find_hunt_explanation.text = getString(R.string.searching_drop)
 
-        find_compass_distance.visibility = View.VISIBLE
+        find_hunt_distance.visibility = View.VISIBLE
         cancel_this_drop.visibility = View.VISIBLE
 
         updateSearchUI()
@@ -200,14 +199,14 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
     }
 
     private fun removeSearchUI() {
-        find_compass_distance.visibility = View.GONE
+        find_hunt_distance.visibility = View.GONE
         cancel_this_drop.visibility = View.GONE
 
         find_a_drop_btn.visibility = View.VISIBLE
         radius_seekbar.visibility = View.VISIBLE
         radius_text.visibility = View.VISIBLE
 
-        find_compass_explanation.text = getString(R.string.find_search_explanation)
+        find_hunt_explanation.text = getString(R.string.find_search_explanation)
     }
 
     //Updates searching drop ui
@@ -216,7 +215,7 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
             distance = Math.round(currentLocation.distanceTo(foundDropLoc))
             //val bearing = currentLocation.bearingTo(foundDropLoc)
 
-            find_compass_distance.text = getString(R.string.f_dm_compass_distance, distance)
+            find_hunt_distance.text = getString(R.string.f_dm_compass_distance, distance)
 
             //If the distance is under 10m, show the drop
             if (distance < DISTANCE_TO_DROP) {
@@ -281,7 +280,6 @@ class FindCompassActivity : AppCompatActivity(), View.OnClickListener, ACallback
         fastestInterval = 500
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
-
 
     private fun progressToRadius(progress: Int): Double {
         return progress * 0.1

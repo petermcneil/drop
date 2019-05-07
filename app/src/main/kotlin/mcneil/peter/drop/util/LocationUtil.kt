@@ -15,6 +15,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import mcneil.peter.drop.activities.LOCATION
+import mcneil.peter.drop.listeners.MapListener
 import mcneil.peter.drop.model.Either
 import pub.devrel.easypermissions.AfterPermissionGranted
 import kotlin.math.abs

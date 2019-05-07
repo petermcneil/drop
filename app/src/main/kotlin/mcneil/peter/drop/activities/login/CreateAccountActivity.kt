@@ -30,10 +30,6 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         Log.d(TAG, "CreateAccountActivity created")
     }
 
-    override fun onBackPressed() {
-        Log.d(TAG, "Back button disabled")
-    }
-
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.a_signup_button -> createAccount()

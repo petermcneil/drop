@@ -20,6 +20,26 @@
                                                       android:layout_marginBottom="24dp"
                                                       android:layout_gravity="center_horizontal"/>
 
+        <androidx.appcompat.widget.AppCompatTextView android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:text="@string/welcome_message_1"
+                                                     android:textAlignment="center" android:textSize="24sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:text="@string/welcome_message_2"
+                                                     android:paddingTop="15dp"
+                                                     android:textAlignment="center" android:textSize="16sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:text="@string/welcome_message_3"
+                                                     android:paddingTop="15dp"
+                                                     android:paddingBottom="30dp"
+                                                     android:textAlignment="center" android:textSize="16sp"/>
+
+
+
         <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
                                                                android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_email"

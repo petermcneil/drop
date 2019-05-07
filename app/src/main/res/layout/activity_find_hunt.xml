@@ -9,7 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/find_compass_heading"
+            android:id="@+id/find_hunt_heading"
             android:textSize="30sp"
             android:layout_marginTop="50dp"/>
 
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/find_compass_distance"
+            android:id="@+id/find_hunt_distance"
             android:textSize="25sp"
             android:layout_marginTop="50dp"
             android:visibility="gone"/>
@@ -28,9 +28,19 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/find_compass_explanation"
+            android:id="@+id/find_hunt_explanation"
             android:textSize="20sp"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp" android:textAlignment="center"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/safety_message_short"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/find_hunt_saftey"
+            android:textSize="20sp"
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"/>
 
     <androidx.appcompat.widget.AppCompatTextView android:layout_width="wrap_content"
                                                  android:layout_height="wrap_content"

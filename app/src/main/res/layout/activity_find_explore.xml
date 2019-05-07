@@ -21,6 +21,16 @@
             android:id="@+id/textView3"
             android:textSize="18sp" android:textAlignment="center"/>
 
+    <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/safety_message_short"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/find_search_saftey"
+            android:textSize="20sp"
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"/>
+
     <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/find_explore_btn"
             android:text="@string/find_search_button"

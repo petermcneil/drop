@@ -1,4 +1,4 @@
-package mcneil.peter.drop.util
+package mcneil.peter.drop.listeners
 
 import android.location.Location
 import android.util.Log

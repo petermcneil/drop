@@ -57,10 +57,10 @@
         <activity android:name=".activities.login.EmailVerificationActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.FindCompassActivity"
+        <activity android:name=".activities.FindHuntActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.FindSearchActivity"
+        <activity android:name=".activities.FindExploreActivity"
                   android:screenOrientation="portrait"/>
 
     </application>

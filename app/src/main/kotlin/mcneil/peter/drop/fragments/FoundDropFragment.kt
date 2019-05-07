@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import mcneil.peter.drop.DropApp.Companion.firebaseUtil
 import mcneil.peter.drop.R
-import mcneil.peter.drop.activities.FindCompassActivity
+import mcneil.peter.drop.activities.FindHuntActivity
 import mcneil.peter.drop.activities.MainActivity
 import mcneil.peter.drop.listeners.AddDropToUserListener
 import mcneil.peter.drop.model.Drop
@@ -56,7 +56,7 @@ class FoundDropFragment : DialogFragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.leave_it -> {
-                val intent = Intent(context, FindCompassActivity::class.java)
+                val intent = Intent(context, FindHuntActivity::class.java)
                 startActivity(intent)
                 dismiss()
             }

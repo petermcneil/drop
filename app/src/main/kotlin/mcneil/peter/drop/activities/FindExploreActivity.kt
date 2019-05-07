@@ -10,12 +10,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import kotlinx.android.synthetic.main.activity_find_search.*
+import kotlinx.android.synthetic.main.activity_find_explore.*
 import mcneil.peter.drop.DropApp
 import mcneil.peter.drop.R
 import mcneil.peter.drop.listeners.AddDropToUserListener
 
-class FindSearchActivity : AppCompatActivity(), View.OnClickListener {
+class FindExploreActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         const val EXPLORATION_NOT = "EXPLORATION"
@@ -25,12 +25,12 @@ class FindSearchActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var explorationNot: NotificationCompat.Builder
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        setContentView(R.layout.activity_find_search)
+        setContentView(R.layout.activity_find_explore)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_find_search)
+        setContentView(R.layout.activity_find_explore)
 
         createNotificationChannel()
         explorationNot = NotificationCompat.Builder(this, EXPLORATION_NOT).setSmallIcon(R.drawable.drop_logo)
