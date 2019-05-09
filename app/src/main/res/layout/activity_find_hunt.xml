@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+                                              xmlns:tools="http://schemas.android.com/tools"
                                               android:layout_width="match_parent"
-                                              android:orientation="vertical"
-                                              android:layout_height="@dimen/fragment_container">
+                                              android:layout_height="match_parent"
+                                              android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/f_dm_compass"
@@ -12,6 +13,27 @@
             android:id="@+id/find_hunt_heading"
             android:textSize="30sp"
             android:layout_marginTop="50dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/f_dm_compass_explanation"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/find_hunt_explanation"
+            android:textSize="20sp"
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            tools:srcCompat="@drawable/compass"
+            android:layout_gravity="center"
+            android:id="@+id/needle"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:layout_marginTop="50dp"
+            android:background="#77FFFFFF"/>
 
     <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/f_dm_hunt_distance"
@@ -30,17 +52,9 @@
             android:layout_gravity="center"
             android:id="@+id/find_hunt_bearing"
             android:textSize="25sp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             android:visibility="gone"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-            android:text="@string/f_dm_compass_explanation"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/find_hunt_explanation"
-            android:textSize="20sp"
-            android:layout_marginTop="50dp" android:textAlignment="center"/>
 
     <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/safety_message_short"
@@ -49,50 +63,57 @@
             android:layout_gravity="center"
             android:id="@+id/find_hunt_saftey"
             android:textSize="20sp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             android:textAlignment="center"/>
 
-    <androidx.appcompat.widget.AppCompatTextView android:layout_width="wrap_content"
-                                                 android:layout_height="wrap_content"
-                                                 android:id="@+id/radius_text"
-                                                 android:layout_gravity="center"
-                                                 android:layout_marginTop="50dp"
-                                                 android:text="@string/radius_text"
-                                                 android:textSize="20sp"/>
+    <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radius_text"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="@string/radius_text"
+            android:textSize="20sp"/>
 
-    <androidx.appcompat.widget.AppCompatSeekBar android:layout_width="350dp"
-                                                android:layout_gravity="center"
-                                                android:layout_marginTop="50dp"
-                                                android:layout_height="wrap_content"
-                                                android:progressTint="#FF9800"
-                                                android:max="150"
-                                                android:progress="1"
-                                                android:id="@+id/radius_seekbar"/>
+    <androidx.appcompat.widget.AppCompatSeekBar
+            android:layout_width="350dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:layout_height="wrap_content"
+            android:progressTint="#FF9800"
+            android:max="150"
+            android:progress="1"
+            android:id="@+id/radius_seekbar"/>
 
-    <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
-                                               android:layout_gravity="center"
-                                               android:layout_height="wrap_content"
-                                               android:id="@+id/find_a_drop_btn"
-                                               android:layout_marginTop="50dp"
-                                               android:text="@string/find_a_drop_btn" android:background="#2196F3"
-                                               android:textAllCaps="true"/>
+    <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="350dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:id="@+id/find_a_drop_btn"
+            android:layout_marginTop="50dp"
+            android:text="@string/find_a_drop_btn"
+            android:background="#2196F3"
+            android:textAllCaps="true"/>
 
-    <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
-                                               android:layout_gravity="center"
-                                               android:layout_height="wrap_content"
-                                               android:id="@+id/show_drop"
-                                               android:layout_marginTop="50dp"
-                                               android:text="@string/show_drop"
-                                               android:background="#4CAF50"
-                                               android:visibility="gone"/>
+    <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="350dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_drop"
+            android:layout_marginTop="10dp"
+            android:text="@string/show_drop"
+            android:background="#4CAF50"
+            android:visibility="gone"/>
 
-    <androidx.appcompat.widget.AppCompatButton android:layout_width="350dp"
-                                               android:layout_gravity="center"
-                                               android:layout_height="wrap_content"
-                                               android:id="@+id/cancel_this_drop"
-                                               android:layout_marginTop="50dp"
-                                               android:text="@string/cancel_this_drop"
-                                               android:background="#F44336"
-                                               android:visibility="gone"/>
+    <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="350dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel_this_drop"
+            android:layout_marginTop="40dp"
+            android:text="@string/cancel_this_drop"
+            android:background="#F44336"
+            android:visibility="gone"/>
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>

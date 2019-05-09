@@ -3,12 +3,14 @@ package mcneil.peter.drop.activities
 import android.Manifest
 import android.app.ProgressDialog
 import android.content.pm.PackageManager
+import android.graphics.Matrix
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +58,7 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
 
     private var distance = 0
     private var callbackDisabled = false
+    private var cancelTimeout = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,17 +68,17 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
         pd.setCancelable(false)
 
         fm = supportFragmentManager
-        cancelDropDialog = AlertDialog.Builder(this).setMessage(R.string.cancel_drop_dialog)
-            .setPositiveButton(R.string.are_you_sure) { _, _ ->
-                removeSearchUI()
-            }.create()
+        cancelDropDialog = AlertDialog.Builder(this)
+            .setMessage(R.string.cancel_drop_dialog)
+            .setPositiveButton(R.string.are_you_sure) { _, _ -> removeSearchUI() }
+            .create()
 
         find_a_drop_btn.setOnClickListener(this)
         cancel_this_drop.setOnClickListener(this)
         show_drop.setOnClickListener(this)
         radius_text.text = getString(R.string.radius_text, progressToRadius(1))
         radius_seekbar.setOnSeekBarChangeListener(this)
-
+        needle.setImageDrawable(resources.getDrawable(R.drawable.compass, null))
         snackbar = Snackbar.make(findViewById(android.R.id.content), "Couldn't find a drop, try increasing the radius", Snackbar.LENGTH_LONG)
     }
 
@@ -94,8 +97,11 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
 
     override fun callback(ret: Pair<String, Drop>) {
         if (::timeout.isInitialized && !timeout.isDone) {
+            Log.d(TAG, "callback: Interrupting timeout")
             timeout.cancel(true)
-        } else if (callbackDisabled) {
+            cancelTimeout = true
+        }
+        if (callbackDisabled) {
             Log.d(TAG, "callback: Disabled because timeout has been reached")
         } else {
             Log.d(TAG, "callback: Found a drop")
@@ -157,15 +163,20 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
                 firebaseUtil.findNewDrop(currentLocation, this@FindHuntActivity, radius)
 
                 //Start a timeout for finding a drop
-                //If the
                 timeout = doAsync {
                     var timeNow = System.currentTimeMillis()
                     while ((timeNow - timeBefore) < TIMEOUT_MILLISECONDS) {
                         timeNow = System.currentTimeMillis()
                     }
-                    callbackDisabled = true
-                    pd.cancel()
-                    snackbar.show()
+                    if(cancelTimeout) {
+                        Log.d(TAG, "timeout: Cancelled and resetting")
+                        cancelTimeout = false
+                    } else {
+                        callbackDisabled = true
+                        pd.cancel()
+                        Log.d(TAG, "timeout: Showing snackbar")
+                        snackbar.show()
+                    }
                 }
             }
         }
@@ -188,12 +199,14 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
         find_a_drop_btn.visibility = View.GONE
         radius_seekbar.visibility = View.GONE
         radius_text.visibility = View.GONE
+        find_hunt_heading.visibility = View.GONE
 
         find_hunt_explanation.text = getString(R.string.searching_drop)
 
         find_hunt_distance.visibility = View.VISIBLE
         find_hunt_bearing.visibility = View.VISIBLE
         cancel_this_drop.visibility = View.VISIBLE
+        needle.visibility = View.VISIBLE
 
         updateSearchUI()
         pd.dismiss()
@@ -203,7 +216,9 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
         find_hunt_distance.visibility = View.GONE
         find_hunt_bearing.visibility = View.GONE
         cancel_this_drop.visibility = View.GONE
+        needle.visibility = View.GONE
 
+        find_hunt_heading.visibility = View.VISIBLE
         find_a_drop_btn.visibility = View.VISIBLE
         radius_seekbar.visibility = View.VISIBLE
         radius_text.visibility = View.VISIBLE
@@ -215,11 +230,12 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
     private fun updateSearchUI() {
         if (::foundDrop.isInitialized && ::currentLocation.isInitialized) {
             distance = Math.round(currentLocation.distanceTo(foundDropLoc))
-            val bearing = currentLocation.bearingTo(foundDropLoc)
+            val bearing = bearing()
 
             find_hunt_distance.text = getString(R.string.f_dm_hunt_distance, distance)
             find_hunt_bearing.text = getString(R.string.f_dm_hunt_bearing, bearing)
 
+            rotateImage(bearing )
             //If the distance is under 10m, show the drop
             if (distance < DISTANCE_TO_DROP) {
                 Log.d(TAG, "updateSearchUI: User found the drop!")
@@ -232,6 +248,22 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
                 cancel_this_drop.visibility = View.GONE
             }
         }
+    }
+
+    private fun bearing(): Float {
+        val b = currentLocation.bearingTo(foundDropLoc) % 360
+        return if (b < 0) {
+            b + 360
+        } else {
+            b
+        }
+    }
+
+    private fun rotateImage(angle: Float) {
+        val matrix = Matrix()
+        needle.scaleType =ImageView.ScaleType.MATRIX
+        matrix.postRotate(angle, (needle.drawable.intrinsicWidth / 2).toFloat(), (needle.drawable.intrinsicHeight / 2).toFloat())
+        needle.imageMatrix = matrix
     }
 
     private fun startLocationUpdates() {
