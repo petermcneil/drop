@@ -37,6 +37,16 @@
             android:layout_gravity="center"
             android:layout_marginTop="80dp"
             android:layout_width="300dp"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp" android:background="#4CAF50"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancel_explore"
+            android:text="@string/cancel_explore"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:background="#F44336"
+            android:visibility="gone"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

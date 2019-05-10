@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.snackbar.Snackbar
 import mcneil.peter.drop.R
+import mcneil.peter.drop.activities.FindExploreActivity
 import mcneil.peter.drop.activities.FindHuntActivity
 
 class FindDropFragment : Fragment(), View.OnClickListener {
@@ -38,16 +39,13 @@ class FindDropFragment : Fragment(), View.OnClickListener {
         super.onAttach(context)
     }
 
-    override fun onClick(v: View?) {
-        Log.d(TAG, "Clicked something: ${v?.id}")
-        when (v!!.id) {
+    override fun onClick(v: View) {
+        Log.d(TAG, "Clicked something: ${v.id}")
+        when (v.id) {
             R.id.f_dm_search -> {
                 Log.d(TAG, "Showing search activity")
-                if (::exploreSnack.isInitialized) {
-                    exploreSnack.show()
-                }
-                //                val intent = Intent(context, FindExploreActivity::class.java)
-                //                startActivity(intent)
+                val intent = Intent(context, FindExploreActivity::class.java)
+                startActivity(intent)
             }
             R.id.f_dm_compass -> {
                 Log.d(TAG, "Showing compass activity")

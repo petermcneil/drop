@@ -6,6 +6,7 @@ import android.location.LocationManager
 import android.util.Log
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
+import mcneil.peter.drop.model.Drop
 import mcneil.peter.drop.util.FirebaseUtil
 import mcneil.peter.drop.util.LocationUtil
 
@@ -17,6 +18,8 @@ class DropApp : Application() {
         lateinit var locationUtil: LocationUtil
         lateinit var firebaseUtil: FirebaseUtil
         lateinit var appContext: Context
+
+        val exploreDrops: MutableMap<String, Drop> = mutableMapOf()
 
         const val LOGGED_IN_PREF = "LoggedIn"
     }

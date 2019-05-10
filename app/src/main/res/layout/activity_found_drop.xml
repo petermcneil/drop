@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/drop_light_dialog_background">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/drop_light_dialog_background">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/drop_light_dialog_text"
+                android:text="@string/found_a_drop"
+                android:textSize="40sp"
+                android:textAlignment="center"
+                android:layout_marginTop="150dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/down_arrow"
+                android:layout_gravity="center"
+                android:layout_marginTop="450dp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:text="@string/f_drop_title_label"
+                android:textSize="24sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/drop_title"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/drop_light_dialog_text"
+                android:background="@color/drop_light_dialog_text_background"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:text="@string/f_drop_date_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/f_d_date_label"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:textColor="@color/drop_light_dialog_text"
+                android:layout_marginTop="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/f_d_date"
+                android:layout_marginBottom="10dp"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:textColor="@color/drop_light_dialog_text"
+                android:background="@color/drop_light_dialog_text_background"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:text="@string/f_drop_message_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/f_d_message_label"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:textColor="@color/drop_light_dialog_text"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/f_d_message"
+                android:layout_marginBottom="10dp"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:textColor="@color/drop_light_dialog_text"
+                android:background="@color/drop_light_dialog_text_background"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/keep_it"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="#4CAF50"
+                android:id="@+id/keep_it"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/leave_it"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="60dp"
+                android:layout_gravity="center"
+                android:background="#F44336"
+                android:id="@+id/leave_it"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.core.widget.NestedScrollView>

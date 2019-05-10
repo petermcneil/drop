@@ -105,5 +105,8 @@
     <string name="forgot_button">Forgotten password?</string>
     <string name="reset_pass_email">Password reset will be sent to the email address: %s</string>
     <string name="toast_password_reset">Email reset sent to %s</string>
+    <string name="cancel_explore">Cancel exploring</string>
+    <string name="notification_found_drop">Found a drop!</string>
+    <string name="found_a_drop">Found a drop!</string>
 
 </resources>

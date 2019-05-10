@@ -21,7 +21,7 @@
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key"/>
-
+        <service android:name=".DropTransitionIntentService"/>
         <activity
                 android:screenOrientation="portrait"
                 android:name=".activities.MainActivity"
@@ -61,6 +61,12 @@
                   android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.FindExploreActivity"
+                  android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.ExploreFoundActivity"
+                  android:launchMode="singleTask"
+                  android:taskAffinity=""
+                  android:excludeFromRecents="true"
                   android:screenOrientation="portrait"/>
 
     </application>

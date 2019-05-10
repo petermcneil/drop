@@ -3,11 +3,12 @@ package mcneil.peter.drop.model
 import android.location.Location
 import android.location.LocationManager
 import androidx.annotation.Keep
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Keep
-data class Drop(val title: String = "Untitled", val message: String, val location: DropLocation, val ownerId: String, val createdOn: String = getCurrentDateTime()) {
+data class Drop(val title: String = "Untitled", val message: String, val location: DropLocation, val ownerId: String, val createdOn: String = getCurrentDateTime()) : Serializable {
 
     companion object {
         const val date_pattern = "yyyy:MM:dd:HH:mm:ss:SSS Z"
@@ -33,7 +34,7 @@ data class Drop(val title: String = "Untitled", val message: String, val locatio
 }
 
 @Keep
-data class DropLocation(val latitude: Double = 0.0, val longitude: Double = 0.0) {
+data class DropLocation(val latitude: Double = 0.0, val longitude: Double = 0.0) : Serializable{
     override fun toString(): String {
         return "${latitude.format(5)}  |  ${longitude.format(5)}"
     }
