@@ -13,4 +13,6 @@ Drop is an app that encourages users to spend less time on their phone and more 
 Drops are found through random exploration or via a specific hunting mode. When a message has been found, a user can choose to add it to their collection or find a new one. In hunting mode, a drop is found in the world and the user is shown its direction and their distance from the drop. In exploration mode, when a user moves around the world they may find a drop randomly.
 
 
-Written in Kotlin and backed by Firebase Authentication, Firebase Realtime Database, and Geofire.
+Written in Kotlin and backed by Firebase Authentication, Firebase Realtime Database, and Geofire. 
+
+Works on API 23+ (Marshmallow).
