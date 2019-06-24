@@ -13,7 +13,7 @@
                                    app:cardBackgroundColor="@color/drop_light_dialog_background"
                                    app:contentPadding="10dp">
 
-    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
                                            android:layout_height="@dimen/drop_dialog_height"
                                            android:background="@color/drop_light_dialog_background">
 

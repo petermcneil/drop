@@ -6,10 +6,11 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/fragment_container"
               android:id="@+id/frag_main_layout"
-              tools:context="mcneil.peter.drop.activities.MainActivity">
+              tools:context="mcneil.peter.drop.activities.MainActivity"
+              android:background="?android:colorBackground">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:id="@+id/constraintLayout">

@@ -34,7 +34,7 @@ class FindHuntActivity : AppCompatActivity(), View.OnClickListener, ACallback<Pa
     private val TAG = this.javaClass.simpleName
     private val TIMEOUT_MILLISECONDS = 10000L
     private val TIME_DIFF = 500
-    private val DISTANCE_TO_DROP = 10
+    private val DISTANCE_TO_DROP = 1000000
 
     private lateinit var currentLocation: Location
     private lateinit var foundDrop: Drop
